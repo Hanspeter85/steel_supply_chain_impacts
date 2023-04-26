@@ -38,7 +38,7 @@ Calc_ewMFA <- function(IOT,Code)
   
   Direct <- Z + y
   
-  data <- data.frame("index" = unique(Code_sel),
+  data <- data.frame(#"index" = unique(Code_sel),
                      "DE" = DE[1:nrow(base$region),1] )
   
   data["Import"] <- colSums(Direct) - diag(Direct)

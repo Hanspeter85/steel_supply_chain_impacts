@@ -19,10 +19,12 @@ Load_IOCodes <- function()
   }
   
   
-  Y_codes <- data.frame("index" = 1:num$reg,
-                        "RegionCode" = base$region$Code,
-                        "RegionName" = base$region$Name,
-                        stringsAsFactors = FALSE)
+  Y_codes <- data.frame("index" = 1:(num$reg * 6),
+                        "RegionCode" = rep( base$region$Code, each = 6 ),
+                        "RegionName" = rep( base$region$Name, each = 6 ),
+                        "SectorCode" = rep( 1:6, 32 ),
+                        "SectorName" = rep( base$demand$Name[1:6], 32 ),
+                        stringsAsFactors = FALSE )
   
   V_codes <- data.frame("index" = 1:7,
                         "Entity" = c( base$input$Name, base$demand$Name[base$demand$Type == "Waste"] ),

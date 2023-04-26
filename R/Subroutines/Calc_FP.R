@@ -1,6 +1,6 @@
 
 # Function to calculate footprint with original model:
-Calc_FP <- function(stressor,pop_switch)
+Calc_FP <- function(stressor)
 {
   L <- IOT$L
   y <- IOT$y
@@ -12,9 +12,11 @@ Calc_FP <- function(stressor,pop_switch)
   FP <- MP %*% y  # Material fooptrints
   
   FP <- Agg(FP, rep(Code$Y$index, each = 6),2)  # Aggregate columns in consuming regions
-  FP <- colSums(FP)
+  FP <- Agg(FP, Code$Z$RegionCode[Code$Z$EntityCode == 1] , 1)  # Aggregate columns in consuming regions
   
-  if(pop_switch == 1) FP <- FP / pop  # Calculate original per cap footprints
+  Result <- data.frame( "IM_RME" = colSums(FP) - diag(FP),
+                        "EX_RME" = rowSums(FP) - diag(FP),
+                        "RMC" = colSums(FP) )
   
-  return(FP)  
+  return(Result)  
 }

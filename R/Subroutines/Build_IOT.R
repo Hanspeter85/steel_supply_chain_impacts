@@ -32,6 +32,9 @@ Build_IOT <- function(SUT,mode)
   
   if(mode == "pxp")
   {
+    # Select the products codes
+    Code$Z <<- Code$Z[ Code$Z$EntityCode == 2, ]
+    
     A <- B%*%D  # Commodity-by-Commodity technology matrix
     
     Z <- A %*% diag(q)
@@ -57,6 +60,9 @@ Build_IOT <- function(SUT,mode)
   
   if(mode == "ixi")
   {
+    # Select the industry codes
+    Code$Z <<- Code$Z[ Code$Z$EntityCode == 1, ]
+    
     A <- D %*% B  # ixi technology matrix (industry technology assumption)
     
     Z <- A %*% diag(x)  # ixi transaction matrix
