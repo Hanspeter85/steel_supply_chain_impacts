@@ -16,9 +16,6 @@ Build_Extension_Biomes <- function()
                 "Temperate Broadleaf & Mixed Forests", "Tropical & Subtropical Coniferous Forests", "Temperate Grasslands, Savannas & Shrublands",
                 "Temperate Conifer Forests", "Mediterranean Forests, Woodlands & Scrub", "Boreal Forests/Taiga", "Tundra")
     
-    Bio_Score <- data.frame("biomes" = biomes,
-                            "score" = c(1,1,1,1,1,2,3,4,5,6,7,8,9,10) )       
-    
     # Read extraction in root classification
     extraction_in_root <- read.csv( str_c( "./input/EPIP/production_in_roots/Iron Ore_",job$year,"_in_roots.csv" ) ) %>% 
       select(GID_id, value)
