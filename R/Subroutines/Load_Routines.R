@@ -25,7 +25,11 @@ fun <- list(paste0(path$repo,"/R/Subroutines/Load_IOCodes.R"),
             paste0(path$repo,"/R/Subroutines/Load_population_data.R"),
             paste0(path$repo,"/R/Subroutines/Build_Extension_Biodiversity_Carbon_Water_Score.R"), 
             paste0(path$repo,"/R/Subroutines/Build_Extension_Biomes.R"),
-            paste0(path$repo,"/R/Subroutines/EPIP/EPIP_00_main.R") )
+            paste0(path$repo,"/R/Subroutines/EPIP/EPIP_00_main.R"),
+            paste0(path$repo,"/R/Subroutines/Run_Hypothetical_Extraction_Method.R"),
+            paste0(path$repo,"/R/Subroutines/run_IDA_MESE.R"))
+
+
 
 
 
@@ -57,6 +61,7 @@ Conco <<- list("EXIO_2_base" = as.matrix( read.xlsx(xlsxFile = paste0(path$conco
                "Root_2_base" = as.matrix( read.csv( "./input/Concordances/032_RegionAggregator.csv", header = FALSE ) ) )
 
 Code <<- Load_IOCodes()                               # Read IO model codes
+Code[["Z_raw"]] <- Code$Z
 
 remove(path_rootclass)
 

@@ -29,7 +29,7 @@ Calc_ewMFA <- function(IOT,Code)
   
   y <- Agg( y, aggkey = Code_sel , dim = 1 )
   
-  y <- Agg( y, aggkey = rep( Code$Y$index, each = 6), 2 )
+  y <- Agg( y, aggkey = Code$Y$RegionCode, 2 )
   
   
   Z <- Agg(x = Z, aggkey = Code_sel,1)
