@@ -27,7 +27,8 @@ fun <- list(paste0(path$repo,"/R/Subroutines/Load_IOCodes.R"),
             paste0(path$repo,"/R/Subroutines/Build_Extension_Biomes.R"),
             paste0(path$repo,"/R/Subroutines/EPIP/EPIP_00_main.R"),
             paste0(path$repo,"/R/Subroutines/Run_Hypothetical_Extraction_Method.R"),
-            paste0(path$repo,"/R/Subroutines/run_IDA_MESE.R"))
+            paste0(path$repo,"/R/Subroutines/run_IDA_MESE.R"),
+            paste0(path$subroutines,"/Footprint_calculation.R"))
 
 
 
@@ -62,6 +63,14 @@ Conco <<- list("EXIO_2_base" = as.matrix( read.xlsx(xlsxFile = paste0(path$conco
 
 Code <<- Load_IOCodes()                               # Read IO model codes
 Code[["Z_raw"]] <- Code$Z
+
+# Load and aggregate population data
+pop <- read.xlsx(paste0(path$repo,"/input/EXIOBASE/EXIOBASE population data.xlsx"),sheet = 3) %>%
+  select(EXIOcode,as.character(job$year))
+pop <- pop[1:49,]                               # Clean pop data
+pop <- colSums(Conco$EXIO_2_base * pop[,2])     # Aggregate to base classification
+pop_agg <- data.frame("region" = base$region$Region_new, "value" = pop) %>% group_by(region) %>% summarise(value = sum(value))
+pop_agg <- as.data.frame(pop_agg)
 
 remove(path_rootclass)
 

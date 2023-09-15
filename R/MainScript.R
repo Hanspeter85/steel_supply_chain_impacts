@@ -40,7 +40,8 @@ path <<- list("input" = paste0(github,"/steel_supply_chain_impacts/input/"),
               "repo" = paste0(github,"/steel_supply_chain_impacts"),
               "SI" = paste0(github,"/steel_supply_chain_impacts/output/SI"),
               "concordance" = paste0(github,"/steel_supply_chain_impacts/input/Concordances/"),
-              "subroutines" = paste0(github,"/steel_supply_chain_impacts/R/Subroutines") )
+              "subroutines" = paste0(github,"/steel_supply_chain_impacts/R/Subroutines"),
+              "MISO2" = paste0(github,"/MatStocks/model_input_data/EndUseShare_codes/output/MISO2_v01_stock_results/"))
 
 ## Load functions and general data frames into workspace
 source( paste0(path$subroutines,"/Load_Routines.R") )
@@ -48,92 +49,30 @@ source( paste0(path$subroutines,"/Load_Routines.R") )
 ## Create supply use tables from raw data and compile IO model
 SUT <<- Load_SUT(type = "Results")                    
 IOT <<- Build_IOT(SUT = SUT,mode = "ixi")                          
-IOT_HEM <<- Run_Hypothetical_Extraction_Method()
+# IOT_HEM <<- Run_Hypothetical_Extraction_Method()
 
-## Load pre-processed extensions and create single data frame
-# Disaggregate iron extraction into biomes
-E1 <- Build_Extension_Biomes()
-E1 <- t( ( t(E1) / colSums(E1) ) * IOT$e[,4] )
-E1[is.na(E1)] <- 0
-print( str_c("Sum of iron ore extraction by biome in 2014: ", sum(E1) ," t/year") )
-# Load other extensions
-E2 <- Build_Extension_AREA_HANPP_AWARE()
-E2 <- as.data.frame(E2)
-print( str_c("Sum of HANPP of iron ore extraction in 2014: ", rowSums(E2[1,]) ," tC/year") )
-print( str_c("Sum of direct land use for iron ore extraction in 2014: ", rowSums(E2[2,]) ," km2/year") )
-E3 <- as.data.frame( Build_Extension_Biodiversity_Carbon_Water_Score() )
-colnames(E3) <- "Biodiversity_Carbon_Water"
-# integrate extensions and discern flow- from index-based extensions
-E_flow <- t( rbind(E1, E2)[-15,] )
-E_index <- as.matrix( cbind( E3, t( E2[3,] ) ) )
-remove(E1,E2,E3)
+## Build extensions
+source( paste0(path$subroutines,"/Build_Extension.R") )
 
 # Set ranking of regions for visualization
 region_agg <- c("China","Europe","United States","Australia","Asia and Pacific (nec)", 
                 "Middle East","Brazil","South America (nec)","Japan","Canada","Russia","India","Africa")
 
-## Calculate all footprints on sectoral from-to level
-source( paste0(path$subroutines,"/Footprint_calculation.R") )
-
-# Load and aggregate population data
-pop <- read.xlsx(paste0(path$repo,"/input/EXIOBASE/EXIOBASE population data.xlsx"),sheet = 3) %>%
-  select(EXIOcode,as.character(job$year))
-pop <- pop[1:49,]                               # Clean pop data
-pop <- colSums(Conco$EXIO_2_base * pop[,2])     # Aggregate to base classification
-pop_agg <- data.frame("region" = base$region$Region_new, "value" = pop) %>% group_by(region) %>% summarise(value = sum(value))
-pop_agg <- as.data.frame(pop_agg)
-
+# Calculate footprints
 Results <- Footprint_calculation(IOT_model = IOT)
-Results_HEM <- Footprint_calculation(IOT_model = IOT_HEM)
-sum(Results$value)
-sum(Results_HEM$value)
+# Results_HEM <- Footprint_calculation(IOT_model = IOT_HEM)
+
+# Aggregate results into region groups (region_agg)
+Results_agg <- Results %>% select(final_demand,value,unit,stressor,destination_region_group) %>% 
+  group_by(stressor,destination_region_group,final_demand) %>% summarise(value = sum(value))
+
+# Set factor levels for industries to always maintain the same order
+Results_agg$final_demand <- factor(x = Results_agg$final_demand, levels = base$industry$Name[20:29]) 
 
 
+### Index Decomposition Analysis for China
 
-Results_compare <- cbind(Results,Results_HEM$value)
-colnames(Results_compare)[c(6,11)] <- c("Baseline","HEM_scenario")
-
-write.xlsx(x = Results_compare, file = "./output/Sector_footprints_HEM_scenario.xlsx")
-
-# Aggregate to region groups
-# Results <- Results %>% select(final_demand,destination_region_group, value, stressor) %>% group_by(final_demand,destination_region_group, stressor) %>% 
-#   summarise(value = sum(value))
-# 
-# Results_HEM <- Results_HEM %>% select(final_demand,destination_region_group, value, stressor) %>% group_by(final_demand,destination_region_group, stressor) %>% 
-#   summarise(value = sum(value))
-
-## Calculate traditional ewMFA indicators
-ewMFA <- cbind( base$region[,c(2,3,5)],Calc_ewMFA(IOT = IOT, Code = Code) )
-ewMFA["Net-trade"] <- ewMFA$Import - ewMFA$Export
-# Read RMC account
-tmp <- Results %>% filter(stressor == "RMC") %>% select(destination_region, value) %>% 
-  group_by(destination_region) %>% summarise(value = sum(value)) 
-# Add RMC to other variables
-ewMFA <- left_join(ewMFA, tmp, by = c("Name" = "destination_region"))
-colnames(ewMFA)[9] <- "RMC"
-
-## Calculate traditional ewMFA indicators with HEM scenario
-ewMFA_HEM <- cbind( base$region[,c(2,3,5)],Calc_ewMFA(IOT = IOT_HEM, Code = Code) )
-ewMFA_HEM["Net-trade"] <- ewMFA_HEM$Import - ewMFA_HEM$Export
-# Read RMC account
-tmp <- Results_HEM %>% filter(stressor == "RMC") %>% select(destination_region, value) %>% 
-  group_by(destination_region) %>% summarise(value = sum(value)) 
-# Add RMC to other variables
-ewMFA_HEM <- left_join(ewMFA_HEM, tmp, by = c("Name" = "destination_region"))
-colnames(ewMFA_HEM)[9] <- "RMC"
-
-ewMFA <- melt(ewMFA,id.vars = colnames(ewMFA)[1:3])
-ewMFA_HEM <- melt(ewMFA_HEM,id.vars = colnames(ewMFA_HEM)[1:3])
-
-ewMFA_comparison_HEM_scenario <- ewMFA
-colnames(ewMFA_comparison_HEM_scenario)[5] <- "Baseline"
-ewMFA_comparison_HEM_scenario <- cbind(ewMFA_comparison_HEM_scenario,"HEM_scenario" = ewMFA_HEM$value)
-
-write.xlsx(x = ewMFA_comparison_HEM_scenario, file = "./output/ewMFA_HEM_scenario.xlsx")
-
-# The region list
-region_agg
-
+# Define order of regions that are compared with China
 reg_order <- c(10,9,4,2,3,11,6,7,8,5,13,12)
 
 r <- 1
@@ -146,8 +85,71 @@ for(r in 1:length(reg_order))
 }
 
 colnames(result_IDA)[2:13] <- region_agg[reg_order]
-
 write.xlsx(x = result_IDA, file = "./output/IDA_eHANPP_per_cap_result_2014_China_vs_all_other_regions.xlsx")
+
+### Compile ew-MFA indicator of stocks and flows
+
+## Calculate traditional ewMFA indicators
+ewMFA <- cbind( base$region[,c(2,3,5)],Calc_ewMFA(IOT = IOT, Code = Code) )
+
+ewMFA["Net-trade"] <- ewMFA$Import - ewMFA$Export
+
+# Add Read RMC account
+tmp <- Results %>% filter(stressor == "RMC") %>% select(destination_region, value) %>% 
+  group_by(destination_region) %>% summarise(value = sum(value)) 
+
+ewMFA <- left_join(ewMFA, tmp, by = c("Name" = "destination_region"))
+colnames(ewMFA)[9] <- "RMC"
+
+## Add steel consumption (GAS)
+tmp <- Results %>% filter(stressor == "Steel_GAS") %>% select(destination_region, value) %>% 
+  group_by(destination_region) %>% summarise(value = sum(value)) 
+colnames(tmp) <- c("Name","GAS")
+ewMFA <- left_join(ewMFA,tmp)
+
+## Add steel stocks from MISO2
+Stock_data <- read.csv(file = paste0(path$MISO2,"global_data_v0_6_no_uncert_enduse.csv"))
+colnames(Stock_data)[6:202] <- 1820:2016
+Stock_data <- Stock_data %>% filter(name == "S10_stock_enduse", material == "iron_steel") %>% select(region, "2014")
+
+## Load region concordances to aggregate MISO2 data
+Conco_EXIO2MISO <- read.csv( file = paste0(path$concordance,"Region_concordance_EXIOBASE_MISO.csv") )
+Conco_EXIO2MISO <- Conco_EXIO2MISO %>% select(MISO_names, EXIOBASE_iso2)
+EXIO_reg_list <- read.xlsx( xlsxFile = paste0(path$concordance,"RegionAggregator_49_to_32.xlsx") )[,1:4]
+
+Stock_data <- left_join(Stock_data, Conco_EXIO2MISO, by = c("region" = "MISO_names"))
+Stock_data <- Stock_data %>% select(EXIOBASE_iso2, "2014")
+colnames(Stock_data) <- c("region", "value") 
+Stock_data <- Stock_data %>% group_by(region) %>% summarise(value = sum(value))
+
+Stock_data <- Stock_data[match(EXIO_reg_list$Abbrev,Stock_data$region),]
+
+# MISO2 stock results are in kilo tons and need to be transformed into tons
+Stock_data$value <- Stock_data$value * 1000
+
+# Aggregate to 32 region PIOT classification
+Stock_data <- colSums( Stock_data$value * Conco$EXIO_2_base )
+
+ewMFA["Stocks"] <- Stock_data  
+
+ewMFA <- Agg( as.matrix(ewMFA[,4:11]), aggkey = ewMFA$Region_new, dim = 1 )
+ewMFA <- as.data.frame(ewMFA)
+
+write.xlsx(x = ewMFA, file = "./output/ewMFA_indicators_13_world_regions.xlsx", rowNames = TRUE)
+
+
+
+
+
+
+
+?write.xlsx
+
+
+
+
+
+
 
 
 

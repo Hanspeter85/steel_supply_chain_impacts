@@ -1,0 +1,178 @@
+"EXIOBASE_iso2","MISO_iso2","MISO_names","Continent_Name","Region_Name","MISO-Region_Name","HANPP-Region","Development","Income.level.(World.Bank.2020)","Income.level.(World.Bank.2016)","index"
+"WA","AF","Afghanistan","Asia","Southern Asia","Asia (other)","Southern Asia","LD","Low income","Low income",1
+"WE","AL","Albania","Europe","Southern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","Upper middle income","Upper middle income",2
+"WF","DZ","Algeria","Africa","Northern Africa","MENA","Northern Africa and Western Asia","DC","Lower middle income","Upper middle income",3
+"WF","AO","Angola","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",4
+"WL","AR","Argentina","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",5
+"AU","AU","Australia","Oceania","Australia and New Zealand","Industrial_NewWorld","Oceania and Australia","IC","High income","High income",6
+"AT","AT","Austria","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",7
+"WL","BS","Bahamas","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",8
+"WM","BH","Bahrain","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","High income","High income",9
+"WA","BD","Bangladesh","Asia","Southern Asia","Asia (other)","Southern Asia","LD","Lower middle income","Lower middle income",10
+"WL","BZ","Belize","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",11
+"WF","BJ","Benin","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Low income",12
+"WA","BT","Bhutan","Asia","Southern Asia","Asia (other)","Southern Asia","LD","Lower middle income","Lower middle income",13
+"WL","BO","Bolivia","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Lower middle income","Lower middle income",14
+"WF","BW","Botswana","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Upper middle income","Upper middle income",15
+"BR","BR","Brazil","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",16
+"WA","BN","Brunei","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","High income","High income",17
+"BG","BG","Bulgaria","Europe","Eastern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","Upper middle income","Upper middle income",18
+"WF","BF","Burkina Faso","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",19
+"WF","BI","Burundi","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",20
+"WA","KH","Cambodia","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","LD","Lower middle income","Lower middle income",21
+"WF","CM","Cameroon","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",22
+"CA","CA","Canada","Americas","Northern America","Industrial_NewWorld","Northern America","IC","High income","High income",23
+"WF","CV","Cape Verde","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",24
+"WF","CF","Central African Republic","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",25
+"WF","TD","Chad","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",26
+"WL","CL","Chile","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",27
+"CN","CN","China","Asia","Eastern Asia","China","Eastern Asia","DC","Upper middle income","Upper middle income",28
+"WL","CO","Colombia","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",29
+"WF","KM","Comoros","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Low income",30
+"WF","CG","Congo","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",31
+"WF","CD","Congo, DR","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",32
+"WL","CR","Costa Rica","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",33
+"WF","CI","Côte d'Ivoire","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",34
+"WL","CU","Cuba","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",35
+"CY","CY","Cyprus","Asia","Western Asia","Industrial OldWorld","Northern Africa and Western Asia","DC","High income","High income",36
+"DK","DK","Denmark","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",37
+"WF","DJ","Djibouti","Africa","Sub-Saharan Africa","MENA","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",38
+"WL","DO","Dominican Republic","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",39
+"WL","EC","Ecuador","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",40
+"WM","EG","Egypt","Africa","Northern Africa","MENA","Northern Africa and Western Asia","DC","Lower middle income","Lower middle income",41
+"WL","SV","El Salvador","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Lower middle income","Lower middle income",42
+"WF","GQ","Equatorial Guinea","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Upper middle income","Upper middle income",43
+"WA","FJ","Fiji","Oceania","Melanesia","Asia (other)","Oceania and Australia","DC","Upper middle income","Upper middle income",44
+"FI","FI","Finland","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",45
+"FR","FR","France","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",46
+"WF","GA","Gabon","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Upper middle income","Upper middle income",47
+"DE","DE","Germany","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",48
+"WF","GH","Ghana","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",49
+"GR","GR","Greece","Europe","Southern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",50
+"FR","GP","Guadeloupe","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",51
+"WL","GT","Guatemala","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Lower middle income",52
+"WF","GN","Guinea","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",53
+"WF","GW","Guinea Bissau","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",54
+"WL","GY","Guyana","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",55
+"WL","HT","Haiti","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","LD","Low income","Low income",56
+"WL","HN","Honduras","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Lower middle income","Lower middle income",57
+"WA","HK","Hong Kong SAR","Asia","Eastern Asia","Asia (other)","Eastern Asia","DC","High income","High income",58
+"HU","HU","Hungary","Europe","Eastern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","High income","High income",59
+"WE","IS","Iceland","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",60
+"IN","IN","India","Asia","Southern Asia","India","Southern Asia","DC","Lower middle income","Lower middle income",61
+"ID","ID","Indonesia","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","Upper middle income","Lower middle income",62
+"WM","IR","Iran","Asia","Southern Asia","MENA","Southern Asia","DC","Upper middle income","Upper middle income",63
+"WM","IQ","Iraq","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","Upper middle income","Upper middle income",64
+"IE","IE","Ireland","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",65
+"WM","IL","Israel","Asia","Western Asia","MENA","Northern Africa and Western Asia","IC","High income","High income",66
+"IT","IT","Italy","Europe","Southern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",67
+"WL","JM","Jamaica","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",68
+"JP","JP","Japan","Asia","Eastern Asia","Industrial OldWorld","Eastern Asia","IC","High income","High income",69
+"WM","JO","Jordan","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","Upper middle income","Lower middle income",70
+"WF","KE","Kenya","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",71
+"WM","KW","Kuwait","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","High income","High income",72
+"WA","LA","Laos","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","LD","Lower middle income","Lower middle income",73
+"WM","LB","Lebanon","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","Upper middle income","Upper middle income",74
+"WF","LS","Lesotho","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",75
+"WF","LR","Liberia","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",76
+"WF","LY","Libya","Africa","Northern Africa","MENA","Northern Africa and Western Asia","DC","Upper middle income","Upper middle income",77
+"WF","MG","Madagascar","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",78
+"WF","MW","Malawi","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",79
+"WA","MY","Malaysia","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","Upper middle income","Upper middle income",80
+"WA","MV","Maldives","Asia","Southern Asia","Asia (other)","Southern Asia","LD","Upper middle income","Upper middle income",81
+"WF","ML","Mali","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",82
+"MT","MT","Malta","Europe","Southern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",83
+"FR","MQ","Martinique","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",84
+"WF","MR","Mauritania","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",85
+"WF","MU","Mauritius","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","High income","Upper middle income",86
+"MX","MX","Mexico","Americas","Latin America and the Caribbean","Industrial OldWorld","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",87
+"WA","MN","Mongolia","Asia","Eastern Asia","Asia (other)","Eastern Asia","DC","Lower middle income","Lower middle income",88
+"WF","MA","Morocco","Africa","Northern Africa","MENA","Northern Africa and Western Asia","DC","Lower middle income","Lower middle income",89
+"WF","MZ","Mozambique","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",90
+"WA","MM","Myanmar","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","LD","Lower middle income","Lower middle income",91
+"WF",NA,"Namibia","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Upper middle income","Upper middle income",92
+"WA","NP","Nepal","Asia","Southern Asia","Asia (other)","Southern Asia","LD","Lower middle income","Low income",93
+"NL","NL","Netherlands","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",94
+"WA","NZ","New Zealand","Oceania","Australia and New Zealand","Industrial_NewWorld","Oceania and Australia","IC","High income","High income",95
+"WL","NI","Nicaragua","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Lower middle income","Lower middle income",96
+"WF","NE","Niger","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",97
+"WF","NG","Nigeria","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",98
+"WA","KP","North Korea","Asia","Eastern Asia","Asia (other)","Eastern Asia","DC","Low income","Low income",99
+"NO","NO","Norway","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",100
+"WM","OM","Oman","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","High income","High income",101
+"WA","PK","Pakistan","Asia","Southern Asia","Asia (other)","Southern Asia","DC","Lower middle income","Lower middle income",102
+"WL","PA","Panama","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","Upper middle income",103
+"WA","PG","Papua New Guinea","Oceania","Melanesia","Asia (other)","Oceania and Australia","DC","Lower middle income","Lower middle income",104
+"WL","PY","Paraguay","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",105
+"WL","PE","Peru","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",106
+"WA","PH","Philippines","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","Lower middle income","Lower middle income",107
+"PL","PL","Poland","Europe","Eastern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","High income","High income",108
+"PT","PT","Portugal","Europe","Southern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",109
+"WL","PR","Puerto Rico","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",110
+"WM","QA","Qatar","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","High income","High income",111
+"FR","RE","Réunion","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",112
+"RO","RO","Romania","Europe","Eastern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","High income","Upper middle income",113
+"WF","RW","Rwanda","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",114
+"WM","SA","Saudi Arabia","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","High income","High income",115
+"WF","SN","Senegal","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Low income",116
+"WF","SL","Sierra Leone","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",117
+"WA","SG","Singapore","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","High income","High income",118
+"WA","SB","Solomon Islands","Oceania","Melanesia","Asia (other)","Oceania and Australia","LD","Lower middle income","Lower middle income",119
+"WF","SO","Somalia","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",120
+"ZA","ZA","South Africa","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","IC","Upper middle income","Upper middle income",121
+"KR","KR","South Korea","Asia","Eastern Asia","Industrial OldWorld","Eastern Asia","DC","High income","High income",122
+"ES","ES","Spain","Europe","Southern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",123
+"WA","LK","Sri Lanka","Asia","Southern Asia","Asia (other)","Southern Asia","DC","Lower middle income","Lower middle income",124
+"WL","SR","Suriname","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",125
+"WF","SZ","Swaziland","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Lower middle income",126
+"SE","SE","Sweden","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",127
+"CH","CH","Switzerland","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",128
+"WM","SY","Syria","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","Low income","Lower middle income",129
+"TW","TW","Taiwan","Asia","Eastern Asia","Asia (other)","Eastern Asia","DC","High income","High income",130
+"WF","TZ","Tanzania","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Low income",131
+"WA","TH","Thailand","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","Upper middle income","Upper middle income",132
+"WF","GM","The Gambia","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",133
+"WA","TL","Timor-Leste","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","Lower middle income","Lower middle income",134
+"WA","TG","Togo","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",135
+"WL","TT","Trinidad and Tobago","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",136
+"WF","TN","Tunisia","Africa","Northern Africa","MENA","Northern Africa and Western Asia","DC","Lower middle income","Lower middle income",137
+"TR","TR","Turkey","Asia","Western Asia","Industrial OldWorld","Northern Africa and Western Asia","DC","Upper middle income","Upper middle income",138
+"WF","UG","Uganda","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",139
+"WM","AE","United Arab Emirates","Asia","Western Asia","MENA","Northern Africa and Western Asia","DC","High income","High income",140
+"GB","GB","United Kingdom","Europe","Northern Europe","Industrial OldWorld","Western Europe","IC","High income","High income",141
+"US","US","United States of America","Americas","Northern America","Industrial_NewWorld","Northern America","IC","High income","High income",142
+"WL","UY","Uruguay","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","High income","High income",143
+"WL","VE","Venezuela","Americas","Latin America and the Caribbean","LACA","Latin America &amp; the Carribean","DC","Upper middle income","Upper middle income",144
+"WA","VN","Vietnam","Asia","South-eastern Asia","Asia (other)","South-Eastern Asia","DC","Lower middle income","Lower middle income",145
+"WM","YE","Yemen","Asia","Western Asia","MENA","Northern Africa and Western Asia","LD","Low income","Lower middle income",146
+"WF","ZM","Zambia","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Lower middle income","Lower middle income",147
+"WF","ZW","Zimbabwe","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","DC","Lower middle income","Low income",148
+"WA","AM","Armenia","Asia","Western Asia","FSU","Northern Africa and Western Asia","TM","Upper middle income","Lower middle income",149
+"WA","AZ","Azerbaijan","Asia","Western Asia","FSU","Northern Africa and Western Asia","TM","Upper middle income","Upper middle income",150
+"WE","BY","Belarus","Europe","Eastern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","Upper middle income","Upper middle income",151
+"BE","BE","Belgium","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",152
+"WE","BA","Bosnia and Herzegovina","Europe","Southern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","Upper middle income","Upper middle income",153
+"HR","HR","Croatia","Europe","Southern Europe","Industrial OldWorld","Eastern &amp; South-Eastern Europe","TM","High income","Upper middle income",154
+"CZ","CZ","Czech Republic","Europe","Eastern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","High income","High income",155
+"WF","ER","Eritrea","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",156
+"EE","EE","Estonia","Europe","Northern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","High income","High income",157
+"WF","ET","Ethiopia","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",158
+"WA","GE","Georgia","Asia","Western Asia","FSU","Northern Africa and Western Asia","TM","Upper middle income","Lower middle income",159
+"WA","KZ","Kazakhstan","Asia","Central Asia","FSU","Central Asia and Russian Federation","TM","Upper middle income","Upper middle income",160
+"WA","KG","Kyrgyzstan","Asia","Central Asia","FSU","Central Asia and Russian Federation","TM","Lower middle income","Lower middle income",161
+"LV","LV","Latvia","Europe","Northern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","High income","High income",162
+"LT","LT","Lithuania","Europe","Northern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","High income","High income",163
+"LU","LU","Luxembourg","Europe","Western Europe","Industrial OldWorld","Western Europe","IC","High income","High income",164
+"WE","MK","North Macedonia","Europe","Southern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","Upper middle income","Upper middle income",165
+"WE","MD","Moldova","Europe","Eastern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","Lower middle income","Lower middle income",166
+"WE","ME","Montenegro","Europe","Southern Europe","Industrial OldWorld","Eastern & South-Eastern Europe","TM","Upper middle income","Upper middle income",167
+"RU","RU","Russia","Europe","Eastern Europe","FSU","Central Asia and Russian Federation","TM","Upper middle income","Upper middle income",168
+"WE","RS","Serbia (incl. Kosovo)","Europe","Southern Europe","Industrial OldWorld","Eastern & South-Eastern Europe","TM","Upper middle income","Upper middle income",169
+"SK","SK","Slovakia","Europe","Eastern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","High income","High income",170
+"SI","SI","Slovenia","Europe","Southern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","High income","High income",171
+"WF","SS","South Sudan","Africa","Sub-Saharan Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Low income",172
+"WF","SD","Sudan","Africa","Northern Africa","Africa (Sub-sahara)","Sub-Saharan Africa","LD","Low income","Lower middle income",173
+"WA","TJ","Tajikistan","Asia","Central Asia","FSU","Central Asia and Russian Federation","TM","Low income","Lower middle income",174
+"WA","TM","Turkmenistan","Asia","Central Asia","FSU","Central Asia and Russian Federation","TM","Upper middle income","Upper middle income",175
+"WE","UA","Ukraine","Europe","Eastern Europe","FSU","Eastern &amp; South-Eastern Europe","TM","Lower middle income","Lower middle income",176
+"WA","UZ","Uzbekistan","Asia","Central Asia","FSU","Central Asia and Russian Federation","TM","Lower middle income","Lower middle income",177
