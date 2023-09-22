@@ -63,33 +63,21 @@ Results <- Footprint_calculation(IOT_model = IOT)
 # Results_HEM <- Footprint_calculation(IOT_model = IOT_HEM)
 
 # Aggregate results into region groups (region_agg)
-Results_agg <- Results %>% select(final_demand,value,unit,stressor,destination_region_group) %>% 
-  group_by(stressor,destination_region_group,final_demand) %>% summarise(value = sum(value))
+Results_agg <- Results %>% mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import")) %>% 
+  select(final_demand,value,unit,stressor,destination_region_group, source) %>% 
+  group_by(source, stressor,destination_region_group,final_demand) %>% summarise(value = sum(value)) 
+
 
 # Set factor levels for industries to always maintain the same order
 Results_agg$final_demand <- factor(x = Results_agg$final_demand, levels = base$industry$Name[20:29]) 
 
+# write.xlsx(x = Results_agg, file = "./output/Footprint_indicators_13_world_regions.xlsx")
 
-### Index Decomposition Analysis for China
 
-# Define order of regions that are compared with China
-reg_order <- c(10,9,4,2,3,11,6,7,8,5,13,12)
 
-r <- 1
-for(r in 1:length(reg_order))
-{
-  tmp <- MEME_decomposition(reg_1 = 1, reg_2 = reg_order[r])
-  if(r == 1) result_IDA <- tmp
-  if(r != 1) result_IDA <- cbind(result_IDA,tmp$value)
-  
-}
-
-colnames(result_IDA)[2:13] <- region_agg[reg_order]
-write.xlsx(x = result_IDA, file = "./output/IDA_eHANPP_per_cap_result_2014_China_vs_all_other_regions.xlsx")
 
 ### Compile ew-MFA indicator of stocks and flows
-
-## Calculate traditional ewMFA indicators
+# Traditional ew-MFA indicators (DE, DMC)
 ewMFA <- cbind( base$region[,c(2,3,5)],Calc_ewMFA(IOT = IOT, Code = Code) )
 
 ewMFA["Net-trade"] <- ewMFA$Import - ewMFA$Export
@@ -107,6 +95,9 @@ tmp <- Results %>% filter(stressor == "Steel_GAS") %>% select(destination_region
 colnames(tmp) <- c("Name","GAS")
 ewMFA <- left_join(ewMFA,tmp)
 
+## Add population
+ewMFA["Population"] <- pop
+
 ## Add steel stocks from MISO2
 Stock_data <- read.csv(file = paste0(path$MISO2,"global_data_v0_6_no_uncert_enduse.csv"))
 colnames(Stock_data)[6:202] <- 1820:2016
@@ -121,7 +112,6 @@ Stock_data <- left_join(Stock_data, Conco_EXIO2MISO, by = c("region" = "MISO_nam
 Stock_data <- Stock_data %>% select(EXIOBASE_iso2, "2014")
 colnames(Stock_data) <- c("region", "value") 
 Stock_data <- Stock_data %>% group_by(region) %>% summarise(value = sum(value))
-
 Stock_data <- Stock_data[match(EXIO_reg_list$Abbrev,Stock_data$region),]
 
 # MISO2 stock results are in kilo tons and need to be transformed into tons
@@ -132,18 +122,32 @@ Stock_data <- colSums( Stock_data$value * Conco$EXIO_2_base )
 
 ewMFA["Stocks"] <- Stock_data  
 
-ewMFA <- Agg( as.matrix(ewMFA[,4:11]), aggkey = ewMFA$Region_new, dim = 1 )
+ewMFA <- Agg( as.matrix(ewMFA[,4:12]), aggkey = ewMFA$Region_new, dim = 1 )
 ewMFA <- as.data.frame(ewMFA)
 
-write.xlsx(x = ewMFA, file = "./output/ewMFA_indicators_13_world_regions.xlsx", rowNames = TRUE)
+# write.xlsx(x = ewMFA, file = "./output/ewMFA_indicators_13_world_regions.xlsx", rowNames = TRUE)
 
 
 
 
+### Index Decomposition Analysis for China
+# Note: Maybe the decomposition does not work correctly because of new column for source region of flow. Needs to be checked.
 
+# Define order of regions that are compared with China
+reg_order <- c(10,9,4,2,3,11,6,7,8,5,13,12)
 
+r <- 1
+for(r in 1:length(reg_order))
+{
+  tmp <- MEME_decomposition(reg_1 = 1, reg_2 = reg_order[r])
+  if(r == 1) result_IDA <- tmp
+  if(r != 1) result_IDA <- cbind(result_IDA,tmp$value)
+  
+}
 
-?write.xlsx
+colnames(result_IDA)[2:13] <- region_agg[reg_order]
+write.xlsx(x = result_IDA, file = "./output/IDA_eHANPP_per_cap_result_2014_China_vs_all_other_regions.xlsx")
+
 
 
 
