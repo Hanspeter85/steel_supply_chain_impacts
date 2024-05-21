@@ -63,6 +63,9 @@ remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list,
 
 
 
+
+
+
 # Run IDA for China and Europe
 source("./R/Subroutines/Calc_IDA.R")
 
