@@ -27,8 +27,7 @@ fun <- list(paste0(path$repo,"/R/Subroutines/Load_IOCodes.R"),
             paste0(path$repo,"/R/Subroutines/Build_Extension_Biomes.R"),
             paste0(path$repo,"/R/Subroutines/EPIP/EPIP_00_main.R"),
             paste0(path$repo,"/R/Subroutines/Run_Hypothetical_Extraction_Method.R"),
-            paste0(path$repo,"/R/Subroutines/run_IDA_MESE.R"),
-            paste0(path$subroutines,"/Footprint_calculation.R"))
+            paste0(path$repo,"/R/Subroutines/run_IDA_MESE.R"))
 
 
 
@@ -44,7 +43,7 @@ base <<- list("region" = read.xlsx(paste0(path$input,"Settings/BaseRegionClassif
               "input" = read.xlsx(paste0(path$input,"Settings/BaseSectorClassification.xlsx"),sheet = 4),
               "demand" = read.xlsx(paste0(path$input,"Settings/BaseSectorClassification.xlsx"),sheet = 3))
 
-num <<- list("pro" = nrow(base$product),
+num <- list("pro" = nrow(base$product),
              "ind" = nrow(base$industry),
              "reg" = nrow(base$region),
              "va" = nrow(base$input),
