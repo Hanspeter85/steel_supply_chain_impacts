@@ -201,24 +201,32 @@
                   "Middle East","Brazil","South America (nec)","Japan","Canada","Russia","India","Africa")
   
   
-  # Aggregate results into region groups (region_agg)
-  # Results_agg <- Results %>% mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import")) %>% 
-  #   select(final_demand,value,unit,stressor,destination_region_group, source) %>% 
-  #   group_by(source, stressor,destination_region_group,final_demand) %>% summarise(value = sum(value)) 
+  agg_key_enduse <- data.frame( "final_demand" = unique(Results_sector_biomes$final_demand),
+                                "end_use" = c("Other products", "Stationary machinery", "Stationary machinery", "Stationary machinery",
+                                              "Stationary machinery", "Other products", "Transport machinery", "Transport machinery",
+                                              "Other products", "Construction materials") )
+  
+  enduse_order <- c("Other products", "Stationary machinery", "Transport machinery", "Construction materials")
   
   # Aggregate results into region groups (region_agg)
+  # Set factor levels for industries to always maintain the same order
+  # Add end use group and set ordering
   Results_agg <- Results %>% select(final_demand,value,unit,stressor,source_region_group, destination_region_group)  %>% 
     group_by(stressor,source_region_group, destination_region_group,final_demand) %>% summarise(value = sum(value)) %>% 
-    mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import"))
+    mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import")) %>% 
+    mutate(final_demand = factor(final_demand, levels = base$industry$Name[20:29])) %>% 
+    left_join(agg_key_enduse, by = "final_demand") %>% 
+    mutate(end_use = factor(end_use, levels = enduse_order))
   
-  # Set factor levels for industries to always maintain the same order
-  Results_agg$final_demand <- factor(x = Results_agg$final_demand, levels = base$industry$Name[20:29]) 
   # write.xlsx(x = Results_agg, file = "./output/Footprint_indicators_13_world_regions.xlsx")
   
-  # Aggregate biomes results
+  
+  # Aggregate biomes results and add end use group
   Results_agg_biome <- Results_sector_biomes %>% select(final_demand,value,unit,stressor,stressor_group,source_region_group, destination_region_group) %>%
     group_by(stressor,stressor_group,source_region_group, destination_region_group,final_demand) %>% summarise(value = sum(value)) %>% 
-    mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import"))
+    mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import")) %>% 
+    left_join(agg_key_enduse, by = "final_demand") %>% 
+    mutate(end_use = factor(end_use, levels = enduse_order))
     
   remove(Results_sector_biomes)
   

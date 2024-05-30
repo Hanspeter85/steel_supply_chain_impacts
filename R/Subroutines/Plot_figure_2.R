@@ -1,4 +1,10 @@
+### This script creates the combined plot of figure 2
 
+
+# Set font/text size for figures
+legend_text_size <- 16
+axis_title_size <- 16
+axis_text_size <- 12
 
 # Get sorting of regions in descending order of RMC and DEC
 reg_sort_RMC <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, RMC) %>% 
@@ -34,26 +40,34 @@ plot_1 <- ggplot() +
   scale_fill_manual(labels = c("Domestic Extraction (DE; left axis)",
                                "Domestic Material Consumption (DMC; left axis)",
                                "Material Footprint (MF; left axis)",
-                               "Gross Additions to Material Stocks (GAS; left axis)",
-                               "Material Stocks (right axis)"),
+                               "Steel Consumption (GAS; left axis)",
+                               "Steel Stocks (right axis)"),
                     values = c("#4472C4", "#ED7D31", "#A6A6A6", "#FFC000", "yellow")) +
   theme(legend.title = element_blank(),
         legend.position = c(0.7, 0.8),
+        legend.background = element_rect(color = "lightgray",fill = "gray97", linewidth = 0.2),
+        legend.text = element_text(size = legend_text_size),
+        axis.title = element_text(size = axis_title_size),
+        axis.text = element_text(size = axis_text_size),
         axis.title.x = element_blank(),
-        panel.grid.major.x = element_blank()) +
-  scale_y_continuous("Material flows in giga tons per year [Gt/y]",
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_rect(color = "grey", 
+                                    fill = NA, 
+                                    size = 1)) +
+  scale_y_continuous("Material flows [Gt/y]",
                      sec.axis = sec_axis(~.*1, 
-                                         name = "Material Stocks in giga tons [Gt]",
-                                         breaks = c(0.5, 1, 1.5, 2),
-                                         labels = c( 1.5, 3, 4.5, 6)),
-                     limits = c(0,2.5),
+                                         name = "Steel Stocks [Gt]",
+                                         breaks = c(0.5, 1, 1.5, 2, 2.5),
+                                         labels = c( 1.5, 3, 4.5, 6, 7.5)),
+                     limits = c(0,2.25),
                      expand = c(0,0)) +
   scale_x_discrete() +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5)
 
 plot_1
 
-# remove(dat_flow, dat_stock)
+remove(dat_flow, dat_stock)
 
 ### Figure 2.2 (MF by source region in relative terms)
 
@@ -87,20 +101,65 @@ plot_2 <- ggplot() +
   scale_fill_manual(values = reg_color) +
   theme(legend.title = element_blank(),
 #        legend.position = c(0.7, 0.8),
+        legend.position = "bottom",
+        legend.background = element_rect(color = "lightgray",fill = "gray97", linewidth = 0.2),
         axis.title.x = element_blank(),
-        panel.grid.major.x = element_blank()) +
+        legend.text = element_text(size = legend_text_size),
+        axis.title = element_text(size = axis_title_size),
+        axis.text = element_text(size = axis_text_size),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(color = "grey", 
+                                    fill = NA, 
+                                    size = 1)) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  labs(y = "Material Footprint by region of iron ore extraction") +
+  labs(y = "MF by region of extraction [%]") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1))
 
 plot_2
 
 # remove(IM_share)
 
-### Figure 2.3 (MF by biomes)
+
+### Figure 2.3 (MF by end use)
+
+dat <- Results_agg %>% ungroup() %>% 
+  filter(stressor == "RMC") %>% 
+  select(destination_region_group, end_use, value) %>% 
+  group_by(destination_region_group, end_use) %>% 
+  summarise(value = sum(value)) %>% 
+  mutate(end_use, end_use = factor(end_use, levels = fct_rev(end_use))) %>% 
+  mutate(destination_region_group = factor(destination_region_group, reg_sort_RMC) )
+  
+# Create and reorder color palette
+reg_color <- get_palette("jco",4)
+reg_color <- reg_color[c(1,2,4,3)]
+
+plot_3 <- ggplot() +
+  geom_bar(data = dat, aes(x = destination_region_group, y = value, fill = end_use), stat = "identity", position = "fill") +
+  theme_minimal() +
+  scale_fill_manual(values = reg_color) +
+  theme(legend.title = element_blank(),
+        #        legend.position = c(0.7, 0.8),
+        legend.position = "bottom",
+        legend.background = element_rect(color = "lightgray",fill = "gray97", linewidth = 0.2),
+        axis.title.x = element_blank(),
+        legend.text = element_text(size = legend_text_size),
+        axis.title = element_text(size = axis_title_size),
+        axis.text = element_text(size = axis_text_size),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(color = "grey", 
+                                    fill = NA, 
+                                    size = 1)) +
+  geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
+  labs(y = "MF by final product [%]") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+plot_3
+
+### Figure 2.4 (MF by biomes)
 
 # Sort indicators for correct visualization and add name for tropics footprint
-MF_tropics_label <- "Footprint in (Sub-)Tropics of Foreign Regions"
+MF_tropics_label <- "MF in (Sub-)Tropics of Foreign Regions [Mt]"
 Biome_label <- unique(Results_agg_biome$stressor_group)
 indicator_sort <- c(Biome_label, MF_tropics_label)
 
@@ -130,17 +189,25 @@ scale_y <- 1/150
 biome_color <- c( get_palette("nejm",6), "yellow")
 biome_color <- biome_color[c(6,1,3,5,2,4,7)]
 
-ggplot() +
+plot_4 <- ggplot() +
   geom_bar(data = dat, aes(x = destination_region_group, y = value, fill = Indicator), stat = "identity", position = "fill") +
   geom_point(data = IM_tropics, aes(x = destination_region_group, y = value*scale_y, fill = Indicator),  shape = 21, color = "black", size = 4) +
   theme_minimal() +
   scale_fill_manual(values = biome_color) +
   theme(legend.title = element_blank(),
         #        legend.position = c(0.7, 0.8),
+        legend.position = "bottom",
+        legend.background = element_rect(color = "lightgray",fill = "gray97", linewidth = 0.2),
         axis.title.x = element_blank(),
-        panel.grid.major.x = element_blank()) +
+        legend.text = element_text(size = legend_text_size),
+        axis.title = element_text(size = axis_title_size),
+        axis.text = element_text(size = axis_text_size),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(color = "grey", 
+                                    fill = NA, 
+                                    size = 1)) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  scale_y_continuous("Material Footprint by biome of iron ore extraction",
+  scale_y_continuous("MF by biome of extraction [%]",
                      sec.axis = sec_axis(~.*1,
                                          name = MF_tropics_label,
                                          breaks = c(0.2, 0.4, 0.6, 0.8,1),
@@ -149,5 +216,25 @@ ggplot() +
                      expand = c(0,0),
                      breaks = c(0.2, 0.4, 0.6, 0.8,1),
                      labels = scales::percent_format(accuracy = 1))
-  
 
+
+# For better readability change axis labels of regions and color to black
+
+reg_name_plot <- c("China", "Europe", "United\nStates", "Asia &\nPacific(nec)", "Japan",
+                   "Middle\nEast", "South\nAmerica(nec)", "India", "Africa", "Russia", "Canada",
+                   "Brazil", "Australia")
+
+plot_1 <- plot_1 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
+plot_2 <- plot_2 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
+plot_3 <- plot_3 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
+plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
+
+# Scale the plots and add "empty" rows to customize margins of plots
+plot_grid(plot_1, NULL, plot_3, NULL, plot_2, align = "v", nrow = 5, rel_heights = c(1,0.05, 1.1, 0.05 ,1.2))
+
+ggsave("./output/Fig_2.png",  # File name for the saved plot
+       plot = last_plot(),  # The last plot created in the session
+       width = 13,  # Width of the plot in inches
+       height = 16,  # Height of the plot in inches
+       dpi = 1850,
+       bg = "white")  # Resolution (dots per inch), adjust as needed
