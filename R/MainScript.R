@@ -65,7 +65,7 @@ source("./R/Subroutines/Compile_full_ewMFA_dataset.R")
 
 # Remove unnecessary objects
 remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list, num, 
-       pop_agg, Results, IOT, SUT, root, path, base, Code, agg_key_biome, enduse_order, region_agg)
+       pop_agg, Results, IOT, SUT, root, path, base, Code, agg_key_biome, enduse_order, region_agg, supply)
 
 # Remove unnecessary funtions
 remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Water_Score, Build_Extension_Biomes,

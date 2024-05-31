@@ -12,6 +12,36 @@ tmp <- Results %>% filter(stressor == "RMC") %>% select(destination_region, valu
 ewMFA <- left_join(ewMFA, tmp, by = c("Name" = "destination_region"))
 colnames(ewMFA)[9] <- "RMC"
 
+## Add RME trade flows 
+tmp <- Results %>% 
+  filter(stressor == "RMC") %>% 
+  select(source_region, destination_region, value) %>% 
+  group_by(source_region, destination_region) %>%
+  summarise(value = sum(value),.groups = 'drop') %>% 
+  mutate(source_region = factor(source_region, base$region$Name)) %>%
+  mutate(destination_region = factor(destination_region, base$region$Name)) %>%
+  pivot_wider(names_from = destination_region, values_from = value) %>% 
+  arrange(source_region, .by_group = TRUE) %>% 
+  select(base$region$Name)
+
+tmp <- as.matrix(tmp)
+
+ewMFA["RME_Import"] = colSums(tmp) - diag(tmp)
+ewMFA["RME_Export"] = rowSums(tmp) - diag(tmp)
+ewMFA["RME_Net-trade"] <- ewMFA$RME_Import - ewMFA$RME_Export  
+
+## Add steel production
+# Create data frame with all useful output flows
+supply <- cbind( "value" = colSums(SUT$S), Code$Z_raw[Code$Z_raw$EntityCode == 2,] )
+
+tmp <- supply %>% filter(SectorCode %in% 4:6) %>% 
+  select(RegionCode, value) %>% 
+  group_by(RegionCode) %>% 
+  summarise(value = sum(value))
+
+ewMFA["Steel_production"] = tmp$value                    
+
+
 ## Add steel consumption (GAS)
 tmp <- Results %>% filter(stressor == "Steel_GAS") %>% select(destination_region, value) %>% 
   group_by(destination_region) %>% summarise(value = sum(value)) 
@@ -46,7 +76,7 @@ Stock_data <- colSums( Stock_data$value * Conco$EXIO_2_base )
 
 ewMFA["Stocks"] <- Stock_data  
 
-ewMFA <- Agg( as.matrix(ewMFA[,4:12]), aggkey = ewMFA$Region_new, dim = 1 )
+ewMFA <- Agg( as.matrix(ewMFA[,4:16]), aggkey = ewMFA$Region_new, dim = 1 )
 ewMFA <- as.data.frame(ewMFA)
 
 # write.xlsx(x = ewMFA, file = "./output/ewMFA_indicators_13_world_regions.xlsx", rowNames = TRUE)

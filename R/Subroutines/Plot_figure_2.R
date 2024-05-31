@@ -1,4 +1,4 @@
-### This script creates the combined plot of figure 2
+### This script creates the combined plot of figure 2 (ewMFA indicators and MF accounts)
 
 
 # Set font/text size for figures
