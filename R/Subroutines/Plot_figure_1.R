@@ -42,7 +42,7 @@ Biome_label <- Results_agg_biome %>%
   left_join(tmp, by = "stressor_group") %>% 
   ungroup()
 
-
+## 1.1 Plot extraction by biomes and source regions  
 # Aggregate across source regions & biomes, set factor levels for sorting and 
 # change units to Mega tons
 dat <- Results_agg_biome %>% 
@@ -78,7 +78,86 @@ plot_1 <- ggplot() +
         panel.border = element_rect(color = "grey", fill = NA, size = 1)) +
   geom_vline(xintercept = seq(0.5, 7, by = 1), color="gray", size=.5, alpha=.5)
 
-plot_1    
+plot_1
 
-  
-  
+## Plot relative bar charts for extraction, land use and HANPP by regions
+# Aggregate across RMC, eLand and eHANPP in terms of source regions
+dat <- Results_agg %>% 
+  filter(source_region_group != "Japan", stressor != "Steel_GAS") %>% 
+  ungroup() %>%  
+  select(stressor, source_region_group, value) %>% 
+  group_by(stressor, source_region_group) %>% 
+  summarise(value = sum(value), .groups = 'drop') %>% 
+  mutate(source_region_group = factor(source_region_group, levels = reg_sort_DE)) %>% 
+  mutate(stressor = factor(stressor, levels = c("RMC", "eLand", "eHANPP")))
+
+# Create labels of stressors that show sum of global stressor
+x_labels <- c("Extraction\n[3.2 Gt/y]", "Land use\n[5593 km2/y]", "HANPP\n[2.98 MtC/y]")
+
+
+plot_2 <- ggplot() +
+  geom_bar(data = dat, aes(x = stressor, y = value, fill = source_region_group), 
+           stat = "identity", position = "fill") +
+  theme_minimal() +
+  scale_fill_manual(values = reg_color) +
+  theme(legend.title = element_blank(),
+        #        legend.position = c(0.7, 0.8),
+        legend.position = "bottom",
+        legend.background = element_rect(color = "lightgray",
+                                         fill = "gray97", 
+                                         linewidth = 0.2),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.text = element_text(size = legend_text_size),
+        axis.title = element_text(size = axis_title_size),
+        axis.text = element_text(size = axis_text_size, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(color = "grey", 
+                                    fill = NA, 
+                                    size = 1)) +
+  geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
+#  labs(x = "Territorial Pressures and Impacts of Iron Ore Mining") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_discrete(labels = x_labels)
+
+plot_2  
+
+## Scatter plot for pressure/impact intensities: 
+## land per ton iron ore on y-axis and and HANPP per land on x-axis and maybe HANPP per ton as circle)
+# Calculate intensities
+dat <- Results_agg %>% 
+  filter(source_region_group != "Japan", stressor != "Steel_GAS") %>% 
+  ungroup() %>%  
+  select(stressor, source_region_group, value) %>% 
+  group_by(stressor, source_region_group) %>% 
+  summarise(value = sum(value), .groups = 'drop') %>% 
+  mutate(source_region_group = factor(source_region_group, levels = reg_sort_DE)) %>% 
+  pivot_wider(names_from = stressor, values_from = value) %>% 
+  mutate(m2_per_kg = 10^6*eLand/RMC) %>% 
+  mutate(NPP_per_m2 = eHANPP/eLand) %>% 
+  select(m2_per_kg, NPP_per_m2, source_region_group)
+
+# calculate global averages
+
+
+ggplot( data = dat, aes(x = NPP_per_m2, y = m2_per_kg, color =  source_region_group) ) +
+  geom_point(alpha = 0.8, size=4) +
+  theme_minimal() +
+  scale_color_manual(values = reg_color) +
+  scale_x_continuous( limits = c(0, 1000) ) +
+  scale_y_continuous( limits = c(0, 9) )
+
+  scale_shape_manual(values = world_scatter$symbol ) +
+  scale_color_manual(values = world_scatter$color) +
+
+  labs( x= paste0("",x_lab," [log10 tonnes]"),
+        y = paste0(y_lab," [log10 tonnes]") ) +
+  theme( panel.grid.minor = element_blank(), 
+         legend.position = "top",
+         text = element_text(size=14),
+         legend.text=element_text(size=14),
+         legend.title=element_blank(),
+         legend.background = element_rect(fill="gray90", size=.5) ) +
+  geom_abline(intercept = 0.15, slope = 1, linetype = 3, alpha = 0.5) + 
+  geom_abline(intercept = -0.15, slope = 1, linetype = 3, alpha = 0.5) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, alpha = 0.5)
