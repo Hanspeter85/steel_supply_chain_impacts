@@ -206,8 +206,8 @@ mp <- as.data.frame(L) %>%
          "Index_From" = "SectorIndex") %>%
   select(-Index, -EntityCode, -EntityName) %>%
   mutate(Index_To = as.numeric(Index_To)) %>%
-  # filter(Index_To %in% output$SectorIndex,
-  #        Index_From %in% output$SectorIndex) %>%
+  filter(Index_To %in% output$SectorIndex,
+         Index_From %in% output$SectorIndex) %>%
   left_join(Code$Z, by = c("Index_To" = "SectorIndex")) %>%
   rename("RegionCode_To" = "RegionCode",
          "RegionName_To" = "RegionName",
@@ -236,13 +236,21 @@ fp <- fd %>%
   left_join(mp, by = c("region_from" = "region_to", "product" = "product"), relationship = "many-to-many") %>%
   mutate("footprint" = multiplier * finaldemand) %>%
   mutate("source" = ifelse(region_from == region_to, "Domestic", "Trade")) %>% 
-  group_by(region_from, region_to, source, UpstreamInputSteelMaking, product) %>% 
+  group_by(region_to, UpstreamInputSteelMaking, product) %>% 
   summarise(footprint = sum(footprint), .groups = 'drop') 
   
+write.xlsx(fp, "./output/FP_upstream.xlsx")
 
 fp %>% group_by(UpstreamInputSteelMaking) %>%
   summarise(footprint = sum(footprint))
 
+
+# L_upstream <- Agg( L[Code$Z$SectorIndex[ Code$Z$SectorName %in% InputSteelMaking$SectorName_From],], 
+#                    rep(c("Primary iron", "Primary iron", "Scrap", "Scrap"), 32), 
+#                    1)
+# 
+# FP_upstream <- L_upstream %*% y
+# rowSums(FP_upstream)
 
 # Create root-to-base region concordance
 colnames( Conco$Root_2_base ) <- 1:32
