@@ -79,7 +79,7 @@ remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Wat
 
 
 # Run IDA for China and Europe
-source("./R/Subroutines/Calc_IDA.R")
+# source("./R/Subroutines/Calc_IDA.R")
 
 
 
@@ -110,74 +110,74 @@ source("./R/Subroutines/Calc_IDA.R")
 
 
 
-
-
-
-res_agg$destination_region_group <- factor( res_agg$destination_region_group, levels = region_ranking)
-
-# Data frame to consistently link world regions to specific symbols and colors in the scatter plot
-world_scatter <<- data.frame("index" = 1:10,
-                             "name" = region_ranking,
-                             "symbol" = 1:10,
-                             "color" = viridis_pal()(10),
-                             stringsAsFactors = FALSE)
-
-res_agg_sel <- res_agg
-res_agg_sel$value[res_agg_sel$stressor == "HANPP"] <- res_agg_sel$value[res_agg_sel$stressor == "HANPP"]/1000
-res_agg_sel$value[res_agg_sel$stressor == "Extraction"] <- res_agg_sel$value[res_agg_sel$stressor == "Extraction"]/1000000
-res_agg_sel$stressor[res_agg_sel$stressor == "Extraction"] <- "Extraction [Mt/y]"
-res_agg_sel$stressor[res_agg_sel$stressor == "AREA"] <- "AREA [km2/y]"
-res_agg_sel$stressor[res_agg_sel$stressor == "HANPP"] <- "HANPP [ktC/y]"
-
-
-ggplot(res_agg_sel, aes(destination_region_group, value, fill = stressor)) + 
-  geom_col(position = "dodge")
-
-
-res_agg_sel <- res_agg %>% filter(stressor %in% c("Extraction", "AREA")) %>% spread(stressor, value)
-
-
-
-
-# Scatter <- function()
-# {
-  
-  scatter <- ggplot( data = res_agg_sel, aes(x = AREA, y = Extraction, color = destination_region_group ) ) +
-    geom_point(alpha = 0.8, size=4, aes(shape = destination_region_group) ) +
-    scale_shape_manual(values = world_scatter$symbol ) +
-    scale_color_manual(values = world_scatter$color) +
-    scale_x_continuous( expand = c(intersec,intersec),
-                        limits = c(lim[1],lim[2]),
-                        breaks = lim[1]:lim[2]) + 
-    scale_y_continuous( expand = c(intersec,intersec),
-                        limits = c(lim[1],lim[2]),
-                        breaks = lim[1]:lim[2] ) +
-    labs( x= paste0("",x_lab," [log10 tonnes]"),
-          y = paste0(y_lab," [log10 tonnes]") ) +
-    theme( panel.grid.minor = element_blank(), 
-           legend.position = "top",
-           text = element_text(size=14),
-           legend.text=element_text(size=14),
-           legend.title=element_blank(),
-           legend.background = element_rect(fill="gray90", size=.5) ) +
-    geom_abline(intercept = 0.15, slope = 1, linetype = 3, alpha = 0.5) + 
-    geom_abline(intercept = -0.15, slope = 1, linetype = 3, alpha = 0.5) +
-    geom_abline(intercept = 0, slope = 1, linetype = 2, alpha = 0.5)
-  
-#   return(scatter)
-# }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 
+# 
+# 
+# res_agg$destination_region_group <- factor( res_agg$destination_region_group, levels = region_ranking)
+# 
+# # Data frame to consistently link world regions to specific symbols and colors in the scatter plot
+# world_scatter <<- data.frame("index" = 1:10,
+#                              "name" = region_ranking,
+#                              "symbol" = 1:10,
+#                              "color" = viridis_pal()(10),
+#                              stringsAsFactors = FALSE)
+# 
+# res_agg_sel <- res_agg
+# res_agg_sel$value[res_agg_sel$stressor == "HANPP"] <- res_agg_sel$value[res_agg_sel$stressor == "HANPP"]/1000
+# res_agg_sel$value[res_agg_sel$stressor == "Extraction"] <- res_agg_sel$value[res_agg_sel$stressor == "Extraction"]/1000000
+# res_agg_sel$stressor[res_agg_sel$stressor == "Extraction"] <- "Extraction [Mt/y]"
+# res_agg_sel$stressor[res_agg_sel$stressor == "AREA"] <- "AREA [km2/y]"
+# res_agg_sel$stressor[res_agg_sel$stressor == "HANPP"] <- "HANPP [ktC/y]"
+# 
+# 
+# ggplot(res_agg_sel, aes(destination_region_group, value, fill = stressor)) + 
+#   geom_col(position = "dodge")
+# 
+# 
+# res_agg_sel <- res_agg %>% filter(stressor %in% c("Extraction", "AREA")) %>% spread(stressor, value)
+# 
+# 
+# 
+# 
+# # Scatter <- function()
+# # {
+#   
+#   scatter <- ggplot( data = res_agg_sel, aes(x = AREA, y = Extraction, color = destination_region_group ) ) +
+#     geom_point(alpha = 0.8, size=4, aes(shape = destination_region_group) ) +
+#     scale_shape_manual(values = world_scatter$symbol ) +
+#     scale_color_manual(values = world_scatter$color) +
+#     scale_x_continuous( expand = c(intersec,intersec),
+#                         limits = c(lim[1],lim[2]),
+#                         breaks = lim[1]:lim[2]) + 
+#     scale_y_continuous( expand = c(intersec,intersec),
+#                         limits = c(lim[1],lim[2]),
+#                         breaks = lim[1]:lim[2] ) +
+#     labs( x= paste0("",x_lab," [log10 tonnes]"),
+#           y = paste0(y_lab," [log10 tonnes]") ) +
+#     theme( panel.grid.minor = element_blank(), 
+#            legend.position = "top",
+#            text = element_text(size=14),
+#            legend.text=element_text(size=14),
+#            legend.title=element_blank(),
+#            legend.background = element_rect(fill="gray90", size=.5) ) +
+#     geom_abline(intercept = 0.15, slope = 1, linetype = 3, alpha = 0.5) + 
+#     geom_abline(intercept = -0.15, slope = 1, linetype = 3, alpha = 0.5) +
+#     geom_abline(intercept = 0, slope = 1, linetype = 2, alpha = 0.5)
+#   
+# #   return(scatter)
+# # }
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
