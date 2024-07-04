@@ -6,23 +6,8 @@
 
 # Set font/text size for figures
 legend_text_size <- 12
-axis_title_size <- 12
-axis_text_size <- 10
-
-# Get sorting of regions in descending order of RMC and DEC
-reg_sort_RMC <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, RMC) %>% 
-  remove_rownames() %>% arrange(desc(RMC)) %>% pull(Region)
-reg_sort_DE <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, DE) %>% 
-  remove_rownames() %>% arrange(-desc(DE)) %>% filter(Region != "Japan") %>% pull(Region)
-
-# Create color codes for MF and resort color palette for extraction in descending order
-reg_color <- c( get_palette("jco",10), "#7b4173","#637939")
-reg_color <- reg_color[c(3,6:11,5,2,12,1,4)]
-
-reg_color <- data.frame( "region" = reg_sort_DE, "color" = reg_color ) %>% 
-  mutate(region = factor(region, reg_sort_DE)) %>% 
-  arrange(region) %>% 
-  pull(color)
+axis_title_size <- 14
+axis_text_size <- 12
 
 # Create Biome order following DE and add labels for plotting
 tmp <-  c("Taiga &\nTundra", 
@@ -34,13 +19,19 @@ tmp <-  c("Taiga &\nTundra",
 
 tmp <- data.frame("stressor_group" = unique(Results_agg_biome$stressor_group),
                   "plot" = tmp)
-                               
+
+biome_color <- get_palette("nejm",6)
+biome_color <- biome_color[c(6,1,3,5,2,4)]
+
 Biome_label <- Results_agg_biome %>% 
   group_by(stressor_group) %>% 
   summarise(value = sum(value)) %>% 
   arrange(desc(value)) %>% 
   left_join(tmp, by = "stressor_group") %>% 
-  ungroup()
+  ungroup() %>% 
+  add_column("color" = biome_color)
+
+
 
 ## 1.1 Plot extraction by biomes and source regions  
 # Aggregate across source regions & biomes, set factor levels for sorting and 
@@ -219,7 +210,7 @@ plot_3
 
 
 # Scale the plots and add "empty" rows to customize margins of plots
-plot_1_2 <- plot_grid(plot_1 + theme(legend.position.inside = c(0.84, 0.7)),
+plot_1_2 <- plot_grid(plot_1 + theme(legend.position.inside = c(0.87, 0.7)),
                       NULL,
                       plot_2,
                       ncol = 3,
@@ -235,7 +226,7 @@ plot_grid(plot_1_2,
 
 ggsave("./output/Fig_1.png",  # File name for the saved plot
        plot = last_plot(),  # The last plot created in the session
-       width = 10,  # Width of the plot in inches
+       width = 13,  # Width of the plot in inches
        height = 13,  # Height of the plot in inches
-       dpi = 1850,
+       dpi = 2050,
        bg = "white")  # Resolution (dots per inch), adjust as needed
