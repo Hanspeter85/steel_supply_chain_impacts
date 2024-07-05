@@ -64,14 +64,19 @@ source("./R/Subroutines/Footprint_calculation.R")
 # Create ew-MFA data set with all accounts including stocks
 source("./R/Subroutines/Compile_full_ewMFA_dataset.R")
 
+# Run IDA for China and Europe
+source("./R/Subroutines/Calc_IDA.R")
+
 # Remove unnecessary objects
-remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list, num, 
-       pop_agg, Results, IOT, SUT, root, path, base, Code, agg_key_biome, enduse_order, region_agg, supply)
+remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list, num, pop_agg,
+       Results, IOT, SUT, root, path, base, Code, agg_key_biome, enduse_order, region_agg, supply)
 
 # Remove unnecessary funtions
 remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Water_Score, Build_Extension_Biomes,
-       Build_IOT, Calc_ewMFA, Calc_FP, Load_IOCodes, Load_population_data, Load_SUT, MEME_decomposition, Plot_HeadlineIndicators,
+       Build_IOT, Calc_ewMFA, Calc_FP, Load_IOCodes, Load_population_data, Load_SUT, Plot_HeadlineIndicators,
        Run_Hypothetical_Extraction_Method)
+
+
 
 
 ## Create figures
@@ -99,8 +104,7 @@ enduse_color <- enduse_color[c(1,2,4,3)]
 
 
 
-# Run IDA for China and Europe
-# source("./R/Subroutines/Calc_IDA.R")
+
 
 
 

@@ -160,7 +160,7 @@ plot_3 <- ggplot(dat) +
         panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_line(linetype = "dashed"),
         panel.border = element_rect(color = "lightgrey", fill = NA, linewidth = 0.5),
-        strip.text = element_text(size = 11, face = "bold"),
+        strip.text = element_text(size = 8, face = "bold"),
         panel.spacing = unit(1, "lines")) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), 
              color="gray", 
