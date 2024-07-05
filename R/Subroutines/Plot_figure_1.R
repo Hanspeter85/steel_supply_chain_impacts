@@ -9,6 +9,25 @@ legend_text_size <- 12
 axis_title_size <- 14
 axis_text_size <- 12
 
+# Get sorting of regions in descending order of RMC and DEC
+reg_sort_RMC <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, RMC) %>% 
+  remove_rownames() %>% arrange(desc(RMC)) %>% pull(Region)
+reg_sort_DE <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, DE) %>% 
+  remove_rownames() %>% arrange(-desc(DE)) %>% filter(Region != "Japan") %>% pull(Region)
+
+# Create color codes for MF and resort color palette for extraction in descending order
+reg_color <- c( get_palette("jco",10), "#7b4173","#637939")
+reg_color <- reg_color[c(3,6:11,5,2,12,1,4)]
+
+reg_color <- data.frame( "region" = reg_sort_DE, "color" = reg_color ) %>% 
+  mutate(region = factor(region, reg_sort_DE)) %>% 
+  arrange(region) %>% 
+  pull(color)
+
+# Create and reorder color palette
+enduse_color <- get_palette("jco",4)
+enduse_color <- enduse_color[c(1,2,4,3)]
+
 # Create Biome order following DE and add labels for plotting
 tmp <-  c("Taiga &\nTundra", 
           "Deserts & Xeric\nShrublands",
