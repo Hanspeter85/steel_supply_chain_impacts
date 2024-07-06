@@ -40,7 +40,11 @@
   
   # Select symbols for point shapes of regions
   #reg_symbol <- c(21,21,21,21,22,22,22,22,25,25,25,25)
-  reg_symbol <- c(15,15,15,15,15,19,19,19,19,17,17,17,17)
+  reg_sort_RMC_Global <- c("Global Average", "Japan", reg_sort_DE)   
+  # reg_symbol <- c(15,15,15,15,15,19,19,19,19,17,17,17,17)
+  
+  reg_symbol_Global <- c(18, 15, reg_symbol)
+  reg_color_Global <- c("red","forestgreen", reg_color)
   
   # Create and rcolor palette for 13 RMC regions
   reg_color_RMC <- data.frame("color" = reg_color, "region" = reg_sort_DE) %>% 
@@ -48,9 +52,18 @@
   
   reg_color_RMC <- reg_color_RMC$color[match(reg_sort_RMC, reg_color_RMC$region)]
   
+  dat_dot <- dat %>% select(destination_region_group, Steel_per_cap, RMC_per_GAS, m2_per_t, gC_per_m2) %>% 
+    mutate(Steel_per_cap = Steel_per_cap*1000) %>% 
+    add_row(destination_region_group = "Global Average", 
+            Steel_per_cap = average_GAS_per_cap, 
+            RMC_per_GAS = average_RMC_per_GAS, 
+            m2_per_t = average_m2_per_t, 
+            gC_per_m2 = average_gC_per_m2) %>% 
+    mutate(destination_region_group = factor(destination_region_group, levels = reg_sort_RMC_Global))
+  
 }
 
-plot_1 <- ggplot( data = dat, aes(x = gC_per_m2, y = m2_per_t, group =  destination_region_group) ) +
+plot_1 <- ggplot( data = dat_dot, aes(x = gC_per_m2, y = m2_per_t, group =  destination_region_group) ) +
   geom_point(size = 5, aes(shape = destination_region_group, color = destination_region_group ) ) +
   theme_minimal() +
   coord_fixed(ratio = (400/2)) +
@@ -70,10 +83,10 @@ plot_1 <- ggplot( data = dat, aes(x = gC_per_m2, y = m2_per_t, group =  destinat
         axis.title.y = element_text(margin = margin(0,10,0,0), face = "bold"),
         axis.text = element_text(size = axis_text_size, color = "black"),
         panel.grid.minor = element_line(linetype="dashed",size=0.5),
-        legend.position = "none",
+        legend.position = "right",
         legend.position.inside = c(0.815, 0.6)) +
-  scale_shape_manual(values = reg_symbol) +
-  scale_color_manual(values = reg_color_RMC) +
+  scale_shape_manual(values = reg_symbol_Global) +
+  scale_color_manual(values = reg_color_Global) +
   scale_x_continuous( limits = c(400, 800),
                       breaks = seq(400, 800, 50),
                       expand = c(0,0)) +
@@ -81,35 +94,31 @@ plot_1 <- ggplot( data = dat, aes(x = gC_per_m2, y = m2_per_t, group =  destinat
                       breaks = seq(0, 3, 0.2),
                       expand = c(0,0),
                       position = "right") +
-  geom_hline(yintercept = average_m2_per_t, linetype = "dashed", color = "red") +
-  geom_vline(xintercept = average_gC_per_m2, linetype = "dashed", color = "red") +
-  geom_text(aes(y = (average_m2_per_t+0.05), label = str_c("Global average: ",round(average_m2_per_t, 2)), x = 450), 
-            colour = "red",
-            size = 4,
-            fontface = 'italic') +
-  geom_text(aes(x = (average_gC_per_m2-10), label = str_c("Global average: ",round(average_gC_per_m2, 0)), y = 1.27), 
-            colour = "red", 
-            angle = 90, 
-            size = 4,
-            fontface = 'italic') +
-  labs(color = "Mining Region", shape = "Mining Region",
-       x ="eHANPP-intensity of eLand [g/m²]",
+  # geom_hline(yintercept = average_m2_per_t, linetype = "dashed", color = "red") +
+  # geom_vline(xintercept = average_gC_per_m2, linetype = "dashed", color = "red") +
+  # geom_text(aes(y = (average_m2_per_t+0.05), label = str_c("Global average: ",round(average_m2_per_t, 2)), x = 450), 
+  #           colour = "red",
+  #           size = 4,
+  #           fontface = 'italic') +
+  # geom_text(aes(x = (average_gC_per_m2-10), label = str_c("Global average: ",round(average_gC_per_m2, 0)), y = 1.27), 
+  #           colour = "red", 
+  #           angle = 90, 
+  #           size = 4,
+  #           fontface = 'italic') +
+  labs(x ="eHANPP-intensity of eLand [g/m²]",
        y = "eLand-intensity of Material Footprint [m²/t]")
 
 plot_1
 
 
-plot_2 <- ggplot( data = dat, aes(x = Steel_per_cap*1000, y = RMC_per_GAS, group =  destination_region_group) ) +
+plot_2 <- ggplot( data = dat_dot, aes(x = Steel_per_cap, y = RMC_per_GAS, group =  destination_region_group) ) +
   geom_point(size = 5, aes(shape = destination_region_group, color = destination_region_group ) ) +
   theme_minimal() +
   coord_fixed(ratio = (720/3.4)) +
   theme(panel.border = element_rect(color = "grey", 
                                     fill = NA, 
                                     size = 0.8),
-        legend.title = element_text(size = legend_text_size, 
-                                    face = "bold", 
-                                    vjust = 1,
-                                    hjust = 0.5),
+        legend.title = element_blank(),
         legend.background = element_rect(color = "lightgray",
                                          fill = "gray97", 
                                          linewidth = 0.2),
@@ -121,36 +130,22 @@ plot_2 <- ggplot( data = dat, aes(x = Steel_per_cap*1000, y = RMC_per_GAS, group
         panel.grid.minor = element_line(linetype="dashed",size=0.5),
         legend.position = "right",
         legend.position.inside = c(0.815, 0.6)) +
-  scale_shape_manual(values = reg_symbol) +
-  scale_color_manual(values = reg_color_RMC) +
+  scale_shape_manual(values = reg_symbol_Global) +
+  scale_color_manual(values = reg_color_Global) +
   scale_x_continuous( limits = c(0, 720),
                       breaks = seq(0, 800, 100),
                       expand = c(0,0)) +
   scale_y_continuous( limits = c(0, 3.4),
                       breaks = seq(0, 4, 0.4),
                       expand = c(0,0)) +
-  geom_hline(yintercept = average_RMC_per_GAS, linetype = "dashed", color = "red") +
-  geom_vline(xintercept = average_GAS_per_cap, linetype = "dashed", color = "red") +
   geom_hline(yintercept = average_RMC_per_GAS_withoutChina, linetype = "dashed", color = "red") +
-  geom_text(aes(y = (average_RMC_per_GAS+0.08), 
-                label = str_c("Global average (including China): ",round(average_RMC_per_GAS, 2)),
-                x = 530), 
-            colour = "red",
-            size = 3.5,
-            fontface = 'italic') +
   geom_text(aes(y = (average_RMC_per_GAS_withoutChina-0.08), 
                 label = str_c("Global average (excluding China): ",round(average_RMC_per_GAS_withoutChina, 2)), 
                 x = 530), 
             colour = "indianred1",
             size = 3.5,
             fontface = 'italic') +
-  geom_text(aes(x = (average_GAS_per_cap-15), label = str_c("Global average: ",round(average_GAS_per_cap, 0)), y = 0.6), 
-            colour = "red", 
-            angle = 90, 
-            size = 3.5,
-            fontface = 'italic') +
-  labs(color = "Mining Region", shape = "Mining Region",
-       x ="Steel Consumption per Capita [kg/head]",
+  labs(x ="Steel Consumption per Capita [kg/head]",
        y = "Material Footprint per Steel Consumption [t/t]")
 
 plot_2
@@ -226,10 +221,10 @@ plot_3 <- ggplot(dat_percap) +
   scale_x_discrete(expand = c(0,0)) +
   scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen"),
                     name = "Per-Capita Consumption Indicators",
-                    labels = c("Steel Consumption [t/cap/y]",
-                               "Material Footprint [t/cap/y]",
-                               "Embodied Land [m²/cap/y]", 
-                               "Embodied HANPP [kgC/cap/y]"))
+                    labels = c("Steel Consumption; GAS [t/cap/y]",
+                               "Material Footprint; MF [t/cap/y]",
+                               "Embodied Land; eLand [m²/cap/y]", 
+                               "Embodied HANPP; eHANPP [kgC/cap/y]"))
 
 plot_3
 
@@ -239,7 +234,7 @@ plot_1 <- plot_1 + theme(plot.margin=unit(c(0,0.75,0,0.15), 'cm'))
 
 # Scale the plots and add "empty" rows to customize margins of plots
 # plot_grid(plot_2, NULL, plot_1, ncol = 3, rel_widths = c(1,0.1,1))
-plot_1_2 <- plot_grid(plot_2, plot_1, ncol = 2, rel_widths = c(1.28,0.9))
+plot_1_2 <- plot_grid(plot_2, plot_1 + theme(legend.position = "none"), ncol = 2, rel_widths = c(1.28,0.9))
 
 plot_grid(plot_3, plot_1_2, nrow = 2)
 
