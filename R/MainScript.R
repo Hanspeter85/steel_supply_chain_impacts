@@ -68,12 +68,11 @@ source("./R/Subroutines/Footprint_calculation.R")
 # Create ew-MFA data set with all accounts including stocks
 source("./R/Subroutines/Compile_full_ewMFA_dataset.R")
 
-
-# Run IDA for China and Europe
+# Run IDA for India, China and Europe
 source("./R/Subroutines/Calc_IDA.R")
 
 # Remove unnecessary objects
-remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list, num, pop_agg,
+remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list, num, pop_agg, result_IDA,
        Results, IOT, SUT, root, path, base, Code, agg_key_biome, enduse_order, region_agg, supply)
 
 # Remove unnecessary funtions
@@ -82,33 +81,12 @@ remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Wat
        Run_Hypothetical_Extraction_Method)
 
 
-
-
 ## Create figures
 source("./R/Subroutines/Plot_figure_1.R")
 source("./R/Subroutines/Plot_figure_2.R")
 source("./R/Subroutines/Plot_figure_3.R")
 source("./R/Subroutines/Plot_figure_4.R")
-
-# Get sorting of regions in descending order of RMC and DEC
-reg_sort_RMC <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, RMC) %>% 
-  remove_rownames() %>% arrange(desc(RMC)) %>% pull(Region)
-reg_sort_DE <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, DE) %>% 
-  remove_rownames() %>% arrange(-desc(DE)) %>% filter(Region != "Japan") %>% pull(Region)
-
-# Create color codes for MF and resort color palette for extraction in descending order
-reg_color <- c( get_palette("jco",10), "#7b4173","#637939")
-reg_color <- reg_color[c(3,6:11,5,2,12,1,4)]
-
-reg_color <- data.frame( "region" = reg_sort_DE, "color" = reg_color ) %>% 
-  mutate(region = factor(region, reg_sort_DE)) %>% 
-  arrange(region) %>% 
-  pull(color)
-
-# Create and reorder color palette
-enduse_color <- get_palette("jco",4)
-enduse_color <- enduse_color[c(1,2,4,3)]
-
+source("./R/Subroutines/Plot_figure_5.R")
 
 
 

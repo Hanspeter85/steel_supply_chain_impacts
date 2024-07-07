@@ -94,17 +94,6 @@ plot_1 <- ggplot( data = dat_dot, aes(x = gC_per_m2, y = m2_per_t, group =  dest
                       breaks = seq(0, 3, 0.2),
                       expand = c(0,0),
                       position = "right") +
-  # geom_hline(yintercept = average_m2_per_t, linetype = "dashed", color = "red") +
-  # geom_vline(xintercept = average_gC_per_m2, linetype = "dashed", color = "red") +
-  # geom_text(aes(y = (average_m2_per_t+0.05), label = str_c("Global average: ",round(average_m2_per_t, 2)), x = 450), 
-  #           colour = "red",
-  #           size = 4,
-  #           fontface = 'italic') +
-  # geom_text(aes(x = (average_gC_per_m2-10), label = str_c("Global average: ",round(average_gC_per_m2, 0)), y = 1.27), 
-  #           colour = "red", 
-  #           angle = 90, 
-  #           size = 4,
-  #           fontface = 'italic') +
   labs(x ="eHANPP-intensity of eLand [g/m²]",
        y = "eLand-intensity of Material Footprint [m²/t]")
 
@@ -140,7 +129,7 @@ plot_2 <- ggplot( data = dat_dot, aes(x = Steel_per_cap, y = RMC_per_GAS, group 
                       expand = c(0,0)) +
   geom_hline(yintercept = average_RMC_per_GAS_withoutChina, linetype = "dashed", color = "red") +
   geom_text(aes(y = (average_RMC_per_GAS_withoutChina-0.08), 
-                label = str_c("Global average (excluding China): ",round(average_RMC_per_GAS_withoutChina, 2)), 
+                label = "Global Average (excl. China)", 
                 x = 530), 
             colour = "indianred1",
             size = 3.5,
@@ -153,24 +142,33 @@ plot_2
 
 ## Plot per capita footprints
 
-# Filter pe capita footprints and changes names for better visualization
+# Calculate global average
+average_RMC_per_cap <- tot$value[tot$stressor == "RMC"]/tot$value[tot$stressor == "POP"]
+average_eLand_per_cap <- 10^6*tot$value[tot$stressor == "eLand"]/tot$value[tot$stressor == "POP"]
+average_eHANPP_per_cap <- 10^3*tot$value[tot$stressor == "eHANPP"]/tot$value[tot$stressor == "POP"]
+
+# Filter per capita footprints and changes names for better visualization
 dat_percap <- dat %>% 
   select(destination_region_group, Steel_per_cap, RMC_per_cap, eLand_per_cap, eHANPP_per_cap) %>% 
   pivot_longer(names_to = "stressor", cols = c("Steel_per_cap", 
                                                "RMC_per_cap", 
                                                "eLand_per_cap", 
                                                "eHANPP_per_cap")) %>% 
+  add_row(destination_region_group = "Global\nAverage", stressor = "Steel_per_cap", value = average_GAS_per_cap/1000) %>% 
+  add_row(destination_region_group = "Global\nAverage", stressor = "RMC_per_cap", value = average_RMC_per_cap) %>% 
+  add_row(destination_region_group = "Global\nAverage", stressor = "eLand_per_cap", value = average_eLand_per_cap) %>%
+  add_row(destination_region_group = "Global\nAverage", stressor = "eHANPP_per_cap", value = average_eHANPP_per_cap) %>% 
+  mutate(destination_region_group = as.character(destination_region_group)) %>% 
   mutate(stressor = factor(stressor, levels = c( "Steel_per_cap", 
                                                  "RMC_per_cap", 
                                                  "eLand_per_cap", 
-                                                 "eHANPP_per_cap"))) %>% 
-  mutate(destination_region_group = as.character(destination_region_group))
+                                                 "eHANPP_per_cap")))
 
 
 dat_percap$destination_region_group[dat_percap$destination_region_group == "United States"] <- "United\nStates"
-dat_percap$destination_region_group[dat_percap$destination_region_group == "Asia and Pacific (nec)"] <- "Asia &\nPacific(nec)"
+dat_percap$destination_region_group[dat_percap$destination_region_group == "Asia and Pacific (nec)"] <- "Asia &\nPacific\n(nec)"
 dat_percap$destination_region_group[dat_percap$destination_region_group == "Middle East"] <- "Middle\nEast"
-dat_percap$destination_region_group[dat_percap$destination_region_group == "South America (nec)"] <- "South\nAmerica(nec)"
+dat_percap$destination_region_group[dat_percap$destination_region_group == "South America (nec)"] <- "South\nAmerica\n(nec)"
 
 # Sort in descending eHANPP order
 reg_sort_eHANPP <- dat_percap %>% 
@@ -187,8 +185,6 @@ dat_percap <- dat_percap %>%
 #   add_row(color = "forestgreen", region = "Japan")
 # 
 # reg_color_eHANPP <- reg_color_eHANPP$color[match(reg_sort_eHANPP, reg_color_eHANPP$region)]
-
-
 
 plot_3 <- ggplot(dat_percap) +
   geom_bar(aes(x = stressor, y = value, fill = stressor),
@@ -211,7 +207,7 @@ plot_3 <- ggplot(dat_percap) +
         panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_line(linetype = "dashed"),
         panel.border = element_rect(color = "lightgrey", fill = NA, linewidth = 0.5),
-        strip.text = element_text(size = 11, face = "bold")) +
+        strip.text = element_text(size = 12.5, face = "bold")) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), 
              color="gray", 
              size=.5, 
@@ -227,8 +223,6 @@ plot_3 <- ggplot(dat_percap) +
                                "Embodied HANPP; eHANPP [kgC/cap/y]"))
 
 plot_3
-
-
 
 plot_1 <- plot_1 + theme(plot.margin=unit(c(0,0.75,0,0.15), 'cm'))
 
