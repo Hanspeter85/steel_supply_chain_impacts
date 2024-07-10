@@ -20,6 +20,8 @@ dat <- Results_agg_biome %>% ungroup() %>% select(stressor_group, destination_re
   mutate(Indicator = factor(Indicator, levels = indicator_sort))
 
 
+data_SI[["3_1"]] <- dat
+
 # Create and rearrange color palette for biomes 
 biome_color <- c( get_palette("nejm",6), "yellow")
 biome_color <- biome_color[c(6,1,3,5,2,4,7)]
@@ -82,6 +84,7 @@ dat <- Results_agg_biome %>% ungroup() %>%
   mutate(destination_region_group = factor(destination_region_group, levels = reg_sort_RMC)) %>% 
   mutate(stressor_group = factor(stressor_group, levels = Biome_label) )
 
+data_SI[["3_2"]] <- dat
 
 plot_2 <- ggplot() +
   geom_col(data = dat, aes(x = destination_region_group, y = value/10^6, fill = stressor_group)) +
@@ -128,6 +131,8 @@ dat <- Results_agg %>%
   mutate(stressor = factor(stressor, levels = c("POP", "Steel_GAS", "RMC", "eLand", "eHANPP"))) %>% 
   mutate(source = factor(source, levels = c("Import", "Domestic", "Population"))) %>% 
   mutate(destination_region_group = as.character(destination_region_group))
+
+data_SI[["3_3"]] <- dat
 
 dat$destination_region_group[dat$destination_region_group == "United States"] <- "United\nStates"
 dat$destination_region_group[dat$destination_region_group == "Asia and Pacific (nec)"] <- "Asia &\nPacific(nec)"

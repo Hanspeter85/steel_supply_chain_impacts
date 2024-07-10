@@ -70,6 +70,11 @@ dat <- Results_agg_biome %>%
   mutate(stressor_group = factor(stressor_group, levels = Biome_label$stressor_group))
 
 
+# Empty list for saving data of figures for SI
+data_SI <- vector(mode = "list", length = 0)
+
+data_SI[["1_1"]] <- dat
+
 plot_1 <- ggplot() +
   geom_col(data = dat, aes(x = stressor_group, y = value, fill = source_region_group), 
            position = position_stack(reverse = FALSE)) +
@@ -116,6 +121,8 @@ dat <- Results_agg %>%
   bind_rows(tmp) %>% 
   mutate(source_region_group = factor(source_region_group, levels = reg_color_Fig1$region)) %>% 
   mutate(stressor = factor(stressor, levels = c("Steel_production","RMC", "eLand", "eHANPP")))
+
+data_SI[["1_2"]] <- dat
 
 # Create labels of stressors that show sum of global stressor
 x_labels <- c("Steel\nProduction\n[1.65 Gt/y]",
@@ -182,6 +189,8 @@ dat <- Results_agg %>%
           source_region_group = "Global Average") %>% 
   mutate(source_region_group = factor(source_region_group, levels = reg_sort_DE_Global))
 
+data_SI[["1_3"]] <- dat
+
 # Select symbols for point shapes of regions
 #reg_symbol <- c(21,21,21,21,22,22,22,22,25,25,25,25)
 reg_symbol <- c(15,15,15,15,19,19,19,19,17,17,17,17)
@@ -244,3 +253,6 @@ ggsave("./output/Fig_1.png",  # File name for the saved plot
        height = 13,  # Height of the plot in inches
        dpi = 2050,
        bg = "white")  # Resolution (dots per inch), adjust as needed
+
+
+

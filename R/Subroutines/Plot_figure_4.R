@@ -25,7 +25,7 @@
     arrange(desc(eHANPP_per_cap)) %>% 
     mutate(destination_region_group = factor(destination_region_group, levels = reg_sort_RMC))
 
-    # calculate global averages
+  # calculate global averages
   tot <- dat %>% 
     select(RMC, Steel_GAS, eHANPP, eLand, POP) %>% 
     pivot_longer(names_to = "stressor", col = c("RMC", "Steel_GAS", "eHANPP", "eLand", "POP")) %>% 
@@ -62,6 +62,8 @@
     mutate(destination_region_group = factor(destination_region_group, levels = reg_sort_RMC_Global))
   
 }
+
+data_SI[["4_1"]] <- dat_dot
 
 plot_1 <- ggplot( data = dat_dot, aes(x = gC_per_m2, y = m2_per_t, group =  destination_region_group) ) +
   geom_point(size = 5, aes(shape = destination_region_group, color = destination_region_group ) ) +
@@ -164,6 +166,7 @@ dat_percap <- dat %>%
                                                  "eLand_per_cap", 
                                                  "eHANPP_per_cap")))
 
+data_SI[["4_2"]] <- dat_percap
 
 dat_percap$destination_region_group[dat_percap$destination_region_group == "United States"] <- "United\nStates"
 dat_percap$destination_region_group[dat_percap$destination_region_group == "Asia and Pacific (nec)"] <- "Asia &\nPacific\n(nec)"

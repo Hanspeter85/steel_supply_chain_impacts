@@ -47,6 +47,8 @@ dat_India <- result_IDA_India %>%
 dat <- dat_China %>% 
   bind_rows(dat_Europe, dat_India)
 
+data_SI[["5"]] <- dat
+
 dat$other_region[dat$other_region == "United States"] <- "United\nStates"
 dat$other_region[dat$other_region == "Asia and Pacific (nec)"] <- "Asia &\nPacific\n(nec)"
 dat$other_region[dat$other_region == "Middle East"] <- "Middle\nEast"

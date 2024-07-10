@@ -24,6 +24,8 @@ dat <- ewMFA %>% select(DE, DMC, RMC, GAS, Stocks) %>%
   mutate(Region = factor(Region, levels = reg_sort_RMC)) %>% 
   mutate(Indicator = factor(Indicator, levels = c("DE", "DMC", "RMC", "GAS", "Stocks")))
 
+data_SI[["2_1"]] <- dat
+
 # scaling factor for secondary y-axis
 scale_y <- 3
 
@@ -90,6 +92,9 @@ IM_share <- Results_agg %>% filter(stressor == "RMC") %>% ungroup() %>%
   mutate( destination_region_group = factor(destination_region_group, levels = reg_sort_RMC) ) %>% 
   mutate(Indicator = "Import Share")
 
+data_SI[["2_2_1"]] <- dat
+data_SI[["2_2_2"]] <- IM_share
+
 # Create and reorder color palette for 12 exraction regions (+ Import Shares)
 reg_color_IM <- c( reg_color, "yellow" )
 
@@ -128,7 +133,9 @@ dat <- Results_agg %>% ungroup() %>%
   summarise(value = sum(value)) %>% 
   mutate(end_use, end_use = factor(end_use, levels = fct_rev(end_use))) %>% 
   mutate(destination_region_group = factor(destination_region_group, reg_sort_RMC) )
-  
+
+data_SI[["2_3"]] <- dat
+
 plot_3 <- ggplot() +
   geom_bar(data = dat, aes(x = destination_region_group, y = value, fill = end_use), stat = "identity", position = "fill") +
   theme_minimal() +
