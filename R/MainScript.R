@@ -74,6 +74,7 @@ source("./R/Subroutines/Plot_figure_1.R")
 source("./R/Subroutines/Plot_figure_2.R")
 source("./R/Subroutines/Plot_figure_3.R")
 source("./R/Subroutines/Plot_figure_4.R")
+
 source("./R/Subroutines/Plot_figure_5.R")
 
 # Write data of figures for SI to file

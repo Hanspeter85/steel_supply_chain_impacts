@@ -3,11 +3,18 @@
 MEME_decomposition <- function(reg_1, reg_2)#df is a dataframe with 4 columns: sector, Year, environmental_pressure, output
 {
   # Read population data for selected regions 1 & 2
-  pop_IDA <- c( pop_agg$value[pop_agg$region == region_agg[reg_1]], pop_agg$value[pop_agg$region == region_agg[reg_2]])
+  pop_IDA <- IDA_data %>% 
+    filter(stressor == "POP",
+           destination_region_group %in% c(reg_1, reg_2)) %>% 
+    select(-stressor) %>% 
+    rename("reg" = "destination_region_group")
+  
+  pop_IDA <- c( pop_IDA$value[pop_IDA$reg == reg_1], pop_IDA$value[pop_IDA$reg == reg_2])
+  
   
   # Create empty data frames for region data sets
   reg_data <- data.frame("index" = 1:2,
-                         "region" = c(region_agg[reg_1], region_agg[reg_2]),
+                         "region" = c(reg_1, reg_2),
                          "POP" = pop_IDA,
                          "GAS" = NA,
                          "RMC" = NA,
@@ -20,15 +27,15 @@ MEME_decomposition <- function(reg_1, reg_2)#df is a dataframe with 4 columns: s
                          "HANPP_per_POP" = NA)
   
   # Write values into data sets
-  reg_data$GAS[1] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_1] & Results_agg$stressor == "Steel_GAS"] )
-  reg_data$RMC[1] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_1] & Results_agg$stressor == "RMC"] )
-  reg_data$eLand[1] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_1] & Results_agg$stressor == "eLand"] )
-  reg_data$eHANPP[1] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_1] & Results_agg$stressor == "eHANPP"] )
+  reg_data$GAS[1] <- IDA_data %>% filter(destination_region_group == reg_1, stressor == "Steel_GAS") %>% pull(value)
+  reg_data$RMC[1] <- IDA_data %>% filter(destination_region_group == reg_1, stressor == "RMC") %>% pull(value)
+  reg_data$eLand[1] <- IDA_data %>% filter(destination_region_group == reg_1, stressor == "eLand") %>% pull(value)
+  reg_data$eHANPP[1] <- IDA_data %>% filter(destination_region_group == reg_1, stressor == "eHANPP") %>% pull(value)
   
-  reg_data$GAS[2] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_2] & Results_agg$stressor == "Steel_GAS"] )
-  reg_data$RMC[2] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_2] & Results_agg$stressor == "RMC"] )
-  reg_data$eLand[2] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_2] & Results_agg$stressor == "eLand"] )
-  reg_data$eHANPP[2] <- sum( Results_agg$value[Results_agg$destination_region_group == region_agg[reg_2] & Results_agg$stressor == "eHANPP"] )
+  reg_data$GAS[2] <- IDA_data %>% filter(destination_region_group == reg_2, stressor == "Steel_GAS") %>% pull(value)
+  reg_data$RMC[2] <- IDA_data %>% filter(destination_region_group == reg_2, stressor == "RMC") %>% pull(value)
+  reg_data$eLand[2] <- IDA_data %>% filter(destination_region_group == reg_2, stressor == "eLand") %>% pull(value)
+  reg_data$eHANPP[2] <- IDA_data %>% filter(destination_region_group == reg_2, stressor == "eHANPP") %>% pull(value)
   
   
   # Calculate shares and ratios
