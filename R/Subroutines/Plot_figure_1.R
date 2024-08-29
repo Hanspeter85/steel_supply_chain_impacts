@@ -26,6 +26,7 @@ reg_color <- data.frame( "region" = reg_sort_DE, "color" = reg_color ) %>%
 
 # Create and color palette and name ordering to include Japan because of steel production
 reg_color_Fig1 <- data.frame("color" = c("forestgreen", reg_color), "region" = c("Japan",reg_sort_DE))
+reg_color_Fig1 <- data.frame("color" = reg_color, "region" = reg_sort_DE)
   
 # Create and reorder color palette
 enduse_color <- get_palette("jco",4)
@@ -65,7 +66,7 @@ dat <- Results_agg_biome %>%
   select(stressor_group, source_region_group, value) %>% 
   group_by(stressor_group, source_region_group) %>% 
   summarise(value = sum(value)/10^6, .groups = 'drop') %>% 
-  add_row(stressor_group = "Deserts & Xeric Shrublands", source_region_group = "Japan", value = 0.001) %>% 
+#  add_row(stressor_group = "Deserts & Xeric Shrublands", source_region_group = "Japan", value = 0.001) %>% 
   mutate(source_region_group = factor(source_region_group, levels = reg_color_Fig1$region)) %>% 
   mutate(stressor_group = factor(stressor_group, levels = Biome_label$stressor_group))
 
@@ -80,7 +81,7 @@ plot_1 <- ggplot() +
            position = position_stack(reverse = FALSE)) +
   theme_minimal() +
   scale_fill_manual(values = reg_color_Fig1$color) +
-  scale_y_continuous("Extraction [Mt/y]",
+  scale_y_continuous("Extraction [Mt/year]",
                      expand = c(0,0),
                      breaks = seq(0,1500,200)) +
   scale_x_discrete(labels = Biome_label$plot,
@@ -120,15 +121,17 @@ dat <- Results_agg %>%
   summarise(value = sum(value), .groups = 'drop') %>% 
   bind_rows(tmp) %>% 
   mutate(source_region_group = factor(source_region_group, levels = reg_color_Fig1$region)) %>% 
-  mutate(stressor = factor(stressor, levels = c("Steel_production","RMC", "eLand", "eHANPP")))
+  mutate(stressor = factor(stressor, levels = c("Steel_production","RMC", "eLand", "eHANPP"))) %>% 
+  filter(stressor != "Steel_production")
 
 data_SI[["1_2"]] <- dat
 
 # Create labels of stressors that show sum of global stressor
-x_labels <- c("Steel\nProduction\n[1.65 Gt/y]",
-              "Iron Ore\nExtraction\n[3.2 Gt/y]", 
-              "Mining\nLand Use\n[5593 km2/y]",
-              "Mining\nHANPP\n[2.98 MtC/y]")
+x_labels <- c(
+#  "Steel\nProduction\n[1.65 Gt/y]",
+              "Iron Ore\nExtraction\n[3.2 Gt/year]", 
+              "Mining\nLand Use\n[5593 km2]",
+              "Mining\nHANPP\n[2.98 MtC/year]")
 
 plot_2 <- ggplot() +
   geom_bar(data = dat, aes(x = stressor, y = value, fill = source_region_group), 
@@ -225,8 +228,12 @@ plot_3 <- ggplot( data = dat, aes(x = gC_per_m2, y = m2_per_t, group =  source_r
   scale_y_continuous( limits = c(0, 9),
                       breaks = seq(0, 9, 1),
                       expand = c(0,0)) +
-  labs(x ="HANPP-intensity of Mining Land [g/m²]",
-       y = "Land-intensity of Extraction [m²/t]")
+  labs(x ="HANPP/Land-intensity of Iron Ore Mining [gC/m²/year]",
+       y = "Land/Extraction-intensity of Iron Ore Mining [m²/t/year]") +
+  geom_hline(yintercept = 1e6 * tot$value[tot$stressor == "eLand"]/tot$value[tot$stressor == "RMC"],
+             linetype = "dashed", color = "red") +
+  geom_vline(xintercept = tot$value[tot$stressor == "eHANPP"]/tot$value[tot$stressor == "eLand"],
+             linetype = "dashed", color = "red")
   
 plot_3
   
@@ -237,14 +244,18 @@ plot_1_2 <- plot_grid(plot_1 + theme(legend.position.inside = c(0.87, 0.5)),
                       NULL,
                       plot_2 + theme(legend.position = "none"),
                       ncol = 3,
-                      rel_widths = c(1,0.06,0.6))
+                      rel_widths = c(1,0.06,0.6),
+                      labels = c("A)","B)"))
 
 plot_grid(plot_1_2, 
           NULL, 
           plot_3 + theme(legend.position.inside = c(0.78, 0.65)), 
           align = "v", 
           nrow = 3, 
-          rel_heights = c(1,0.05, 1))
+          rel_heights = c(1,0.05, 1),
+          labels = c(NULL,NULL,"C)"),
+          label_x = .2,
+          label_y = -0.05)
 
 
 ggsave("./output/Fig_1.png",  # File name for the saved plot

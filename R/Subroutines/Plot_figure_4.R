@@ -96,8 +96,13 @@ plot_1 <- ggplot( data = dat_dot, aes(x = gC_per_m2, y = m2_per_t, group =  dest
                       breaks = seq(0, 3, 0.2),
                       expand = c(0,0),
                       position = "right") +
-  labs(x ="eHANPP-intensity of eLand [g/m²]",
-       y = "eLand-intensity of Material Footprint [m²/t]")
+  labs(x ="eHANPP-steel/eLand-steel intensity [gC/m²/year]",
+       y = "eLand-steel/IO-MF intensity [m²/t/year]") +
+  geom_hline(yintercept = average_m2_per_t,
+             linetype = "dashed", color = "red") +
+  geom_vline(xintercept = average_gC_per_m2,
+             linetype = "dashed", color = "red")
+
 
 plot_1
 
@@ -130,14 +135,18 @@ plot_2 <- ggplot( data = dat_dot, aes(x = Steel_per_cap, y = RMC_per_GAS, group 
                       breaks = seq(0, 4, 0.4),
                       expand = c(0,0)) +
   geom_hline(yintercept = average_RMC_per_GAS_withoutChina, linetype = "dashed", color = "red") +
-  geom_text(aes(y = (average_RMC_per_GAS_withoutChina-0.08), 
-                label = "Global Average (excl. China)", 
-                x = 530), 
+  geom_text(aes(y = (average_RMC_per_GAS_withoutChina-0.08),
+                label = "Global Average (excl. China)",
+                x = 530),
             colour = "indianred1",
             size = 3.5,
             fontface = 'italic') +
-  labs(x ="Steel Consumption per Capita [kg/head]",
-       y = "Material Footprint per Steel Consumption [t/t]")
+  labs(x ="Per-capita Steel-GAS [kg/cap/year]",
+       y = "IO-MF/Steel-GAS intensity [t/t]") +
+  geom_hline(yintercept = average_RMC_per_GAS,
+             linetype = "dashed", color = "red") +
+  geom_vline(xintercept = average_GAS_per_cap,
+             linetype = "dashed", color = "red")
 
 plot_2
 
@@ -219,11 +228,11 @@ plot_3 <- ggplot(dat_percap) +
                      expand = c(0,0)) +
   scale_x_discrete(expand = c(0,0)) +
   scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen"),
-                    name = "Per-Capita Consumption Indicators",
-                    labels = c("Steel Consumption; GAS [t/cap/y]",
-                               "Material Footprint; MF [t/cap/y]",
-                               "Embodied Land; eLand [m²/cap/y]", 
-                               "Embodied HANPP; eHANPP [kgC/cap/y]"))
+                    name = "Per-capita Indicators:",
+                    labels = c("Steel use; Steel-GAS [t/cap/year]",
+                               "Iron Ore Material Footprint; IO-MF [t/cap/year]",
+                               "Embodied Land; eLand-steel [m²/cap]", 
+                               "Embodied HANPP; eHANPP-steel [kgC/cap/year]"))
 
 plot_3
 
@@ -231,9 +240,15 @@ plot_1 <- plot_1 + theme(plot.margin=unit(c(0,0.75,0,0.15), 'cm'))
 
 # Scale the plots and add "empty" rows to customize margins of plots
 # plot_grid(plot_2, NULL, plot_1, ncol = 3, rel_widths = c(1,0.1,1))
-plot_1_2 <- plot_grid(plot_2, plot_1 + theme(legend.position = "none"), ncol = 2, rel_widths = c(1.28,0.9))
+plot_1_2 <- plot_grid(plot_2, plot_1 + theme(legend.position = "none"), 
+                      ncol = 2,
+                      rel_widths = c(1.28,0.9),
+                      labels = c("B)","C)"))
 
-plot_grid(plot_3, plot_1_2, nrow = 2)
+plot_grid(plot_3,
+          plot_1_2,
+          nrow = 2,
+          labels = c(NULL, "A)"))
 
 ggsave("./output/Fig_4.png",
        plot = last_plot(),  

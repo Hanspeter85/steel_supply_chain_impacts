@@ -43,7 +43,7 @@ plot_1 <- ggplot() +
                                     fill = NA, 
                                     size = 1)) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  scale_y_continuous("MF by biome",
+  scale_y_continuous("IO-MF-biome",
                      expand = c(0,0),
                      breaks = c(0.2, 0.4, 0.6, 0.8,1),
                      labels = scales::percent_format(accuracy = 1)) + 
@@ -105,7 +105,7 @@ plot_2 <- ggplot() +
                                     fill = NA, 
                                     size = 1)) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  scale_y_continuous("Imports of MF by biome [Mt/y]",
+  scale_y_continuous("IO-MF-biome of imports [Mt/year]",
                      expand = c(0,0)) +
   scale_x_discrete(labels = reg_name_plot)
 
@@ -141,7 +141,7 @@ dat$destination_region_group[dat$destination_region_group == "South America (nec
 
 dat <- dat %>% mutate(destination_region_group = factor(destination_region_group, levels = reg_name_plot))
 
-x_labels <- c("POP", "Steel-GAS", "MF", "eLand", "eHANPP")
+x_labels <- c("POP", "Steel-GAS", "IO-MF", "eLand-steel", "eHANPP-steel")
 
 plot_3 <- ggplot(dat) +
   geom_bar(aes(x = stressor, y = share_value, fill = source),
@@ -185,7 +185,11 @@ plot_3 <- ggplot(dat) +
 plot_3
 
 # Scale the plots and add "empty" rows to customize margins of plots
-plot_grid(plot_3, NULL, plot_1, NULL, plot_2, axis = "l", nrow = 5, rel_heights = c(1.2,0.02, 1, 0.02 ,1))
+plot_grid(plotlist = list(plot_3, NULL, plot_1,NULL,plot_2),
+          axis = "l",
+          nrow = 5,
+          labels = c("A)",NA, "B)",NA, "C)"), 
+          rel_heights = c(1.2,0.02, 1, 0.02 ,1))
 
 # plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 

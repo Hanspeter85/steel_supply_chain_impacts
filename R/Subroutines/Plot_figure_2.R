@@ -22,7 +22,8 @@ dat <- ewMFA %>% select(DE, DMC, RMC, GAS, Stocks) %>%
   pivot_longer(cols = c(DE, DMC, RMC, GAS, Stocks), names_to = "Indicator", values_to = "Value") %>% 
   mutate(Value = Value/10^9) %>% 
   mutate(Region = factor(Region, levels = reg_sort_RMC)) %>% 
-  mutate(Indicator = factor(Indicator, levels = c("DE", "DMC", "RMC", "GAS", "Stocks")))
+  mutate(Indicator = factor(Indicator, levels = c("DE", "DMC", "RMC", "GAS", "Stocks"))) %>% 
+  filter(Indicator != "DMC")
 
 data_SI[["2_1"]] <- dat
 
@@ -40,11 +41,10 @@ plot_1 <- ggplot() +
   geom_point(data = dat_stock, aes(x = Region, y = Value, fill = Indicator), shape = 21, color = "black", size = 4) +
   theme_minimal() +
   scale_fill_manual(labels = c("Domestic Extraction (DE; left axis)",
-                               "Domestic Material Consumption (DMC; left axis)",
-                               "Material Footprint (MF; left axis)",
-                               "Steel Consumption (GAS; left axis)",
+                               "Iron Ore Material Footprint (IO-MF; left axis)",
+                               "Steel Use (Steel-GAS; left axis)",
                                "Steel Stocks (right axis)"),
-                    values = c("#4472C4", "#ED7D31", "#A6A6A6", "#FFC000", "yellow")) +
+                    values = c("#4472C4", "#ED7D31", "#FFC000", "yellow")) +
   theme(legend.title = element_blank(),
         legend.position = c(0.7, 0.8),
         legend.background = element_rect(color = "lightgray",fill = "gray97", linewidth = 0.2),
@@ -57,7 +57,7 @@ plot_1 <- ggplot() +
         panel.border = element_rect(color = "grey", 
                                     fill = NA, 
                                     size = 1)) +
-  scale_y_continuous("Material flows [Gt/y]",
+  scale_y_continuous("Material flows [Gt/year]",
                      sec.axis = sec_axis(~.*1, 
                                          name = "Steel Stocks [Gt]",
                                          breaks = c(0.5, 1, 1.5, 2, 2.5),
@@ -116,7 +116,7 @@ plot_2 <- ggplot() +
                                     fill = NA, 
                                     size = 1)) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  labs(y = "MF by region of extraction [%]") +
+  labs(y = "IO-MF by region of extraction [%]") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1))
 
 plot_2
@@ -153,7 +153,7 @@ plot_3 <- ggplot() +
                                     fill = NA, 
                                     size = 1)) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  labs(y = "MF by final product [%]") +
+  labs(y = "IO-MF by final product [%]") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1))
 
 plot_3
@@ -169,7 +169,15 @@ plot_2 <- plot_2 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = 
 plot_3 <- plot_3 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 
 # Scale the plots and add "empty" rows to customize margins of plots
-plot_grid(plot_1, NULL, plot_3, NULL, plot_2, align = "v", nrow = 5, rel_heights = c(1,0.05, 1.1, 0.05 ,1.2))
+plot_grid(plot_1, 
+          NULL, 
+          plot_3, 
+          NULL, 
+          plot_2, 
+          align = "v", 
+          nrow = 5, 
+          rel_heights = c(1,0.05, 1.1, 0.05 ,1.2),
+          labels = c("A)", NA,"B)",NA,"C)"))
 
 ggsave("./output/Fig_2.png",  # File name for the saved plot
        plot = last_plot(),  # The last plot created in the session
