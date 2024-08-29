@@ -8,7 +8,7 @@ tmp <- dat_percap %>%
   mutate(value = value * 1000) %>% 
   pull(value)
 
-result_IDA_China[,2:13] <- result_IDA_China[,2:13] / tmp
+result_IDA_China[,2:14] <- result_IDA_China[,2:14] / tmp
 
 # Europe
 tmp <- dat_percap %>% 
@@ -17,16 +17,16 @@ tmp <- dat_percap %>%
   mutate(value = value * 1000) %>% 
   pull(value)
 
-result_IDA_Europe[,2:13] <- result_IDA_Europe[,2:13] / tmp
+result_IDA_Europe[,2:14] <- result_IDA_Europe[,2:14] / tmp
 
-# India
-tmp <- dat_percap %>% 
-  filter(stressor == "eHANPP_per_cap",
-         destination_region_group == "India") %>%
-  mutate(value = value * 1000) %>% 
-  pull(value)
+# Global average
+tmp <- IDA_data %>% 
+  filter(destination_region_group == "Global",
+         stressor %in% c("eHANPP","POP"))
 
-result_IDA_India[,2:13] <- result_IDA_India[,2:13] / tmp
+tmp <- 1e6* tmp$value[tmp$stressor == "eHANPP"] / tmp$value[tmp$stressor == "POP"]
+
+result_IDA_Global[,2:14] <- result_IDA_Global[,2:14] / tmp
 
 # Transform data for plotting
 dat_China <- result_IDA_China %>% 
@@ -39,13 +39,13 @@ dat_Europe <- result_IDA_Europe %>%
                col = all_of(colnames(result_IDA_Europe)[-1])) %>% 
   mutate("destination_region_group" = "Europe")
 
-dat_India <- result_IDA_India %>% 
+dat_Global <- result_IDA_Global %>% 
   pivot_longer(names_to = "other_region", 
-               col = all_of(colnames(result_IDA_India)[-1])) %>% 
-  mutate("destination_region_group" = "India")
+               col = all_of(colnames(result_IDA_Global)[-1])) %>% 
+  mutate("destination_region_group" = "Global")
 
 dat <- dat_China %>% 
-  bind_rows(dat_Europe, dat_India)
+  bind_rows(dat_Europe, dat_Global)
 
 data_SI[["5"]] <- dat
 
@@ -53,24 +53,20 @@ dat$other_region[dat$other_region == "United States"] <- "United\nStates"
 dat$other_region[dat$other_region == "Asia and Pacific (nec)"] <- "Asia &\nPacific\n(nec)"
 dat$other_region[dat$other_region == "Middle East"] <- "Middle\nEast"
 dat$other_region[dat$other_region == "South America (nec)"] <- "South\nAmerica\n(nec)"
+dat$other_region[dat$other_region == "Global"] <- "Global\nAverage"
+
+dat$destination_region_group[dat$destination_region_group == "Global"] <- "Global Average"
 
 dat <- dat %>% 
-  mutate(other_region = factor(other_region, levels = reg_sort_eHANPP[-9])) %>% 
+  mutate(other_region = factor(other_region, levels = reg_sort_eHANPP)) %>% 
   mutate(effect = factor(effect, levels = c("GAS_per_head", "RMC_per_GAS", "Land_per_RMC", "HANPP_per_Land", "TOTAL_delta")))
 
 dat_tot <- dat %>% filter(effect == "TOTAL_delta")
 
 dat <- dat %>% filter(effect != "TOTAL_delta")
 
-# dat <- Results_agg_biome %>% ungroup() %>% 
-#   filter(source == "Import") %>% 
-#   select(destination_region_group, stressor_group, value) %>% 
-#   group_by(destination_region_group, stressor_group) %>% 
-#   summarise(value = sum(value), .groups = 'drop') %>% 
-#   mutate(destination_region_group = factor(destination_region_group, levels = reg_sort_RMC)) %>% 
-#   mutate(stressor_group = factor(stressor_group, levels = Biome_label) )
 
-# set_region <- "China"
+# set_region <- "Global"
 plot_IDA <- function(set_region)
 {
   plot <- ggplot() +
@@ -100,10 +96,10 @@ plot_IDA <- function(set_region)
     guides(fill = guide_legend(theme = theme(legend.title.position="top"), title.hjust = 0.5)) +
     scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen", "yellow"),
                       name = "Cross-Country Decomposition Effects:",
-                      labels = c("Steel-GAS per Capita",
-                                 "MF per Steel-GAS",
-                                 "eLand per MF", 
-                                 "eHANPP per eLand",
+                      labels = c("Per-Capita Steel-GAS",
+                                 "IO-MF/Steel-GAS",
+                                 "eLand-steel/IO-MF", 
+                                 "eHANPP-steel/eLand-steel",
                                  "Delta-TOTAL")) +
     geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
     scale_y_continuous(str_c("% of Per-Capita eHANPP of ", set_region),
@@ -115,13 +111,14 @@ plot_IDA <- function(set_region)
 }
 
 plot_Europe <- plot_IDA("Europe") + theme(legend.position = "none")
-plot_China <- plot_IDA("China") + theme(legend.position = "top")
-plot_India <- plot_IDA("India") + theme(legend.position = "none") + scale_y_continuous(str_c("% of Per-Capita eHANPP of India"),
-                                                                                       breaks = seq(-25,25,2),
-                                                                                       expand = c(0, 0),
-                                                                                       labels = scales::percent_format(accuracy = 1))
+plot_China <- plot_IDA("China") + theme(legend.position = "none")
+plot_Global <- plot_IDA("Global Average") + theme(legend.position = "top")
 
-plot_grid(plot_China, NULL, plot_Europe, NULL, plot_India, axis = "l", nrow = 5, rel_heights = c(1.2,0.02, 1, 0.02 ,1))
+plot_grid(plotlist = list(plot_Global, NULL, plot_China, NULL, plot_Europe), 
+          axis = "l", 
+          nrow = 5, 
+          rel_heights = c(1.2,0.02, 1, 0.02 ,1),
+          labels = c("A)",NA,"B)",NA,"C)"))
 
 # plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 
