@@ -102,7 +102,7 @@ plot_IDA <- function(set_region)
                                  "eHANPP-steel/eLand-steel",
                                  "Delta-TOTAL")) +
     geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-    scale_y_continuous(str_c("% of Per-Capita eHANPP of ", set_region),
+    scale_y_continuous(str_c("Per-capita eHANPP-steel of ", set_region),
                        breaks = seq(-25,25,0.2),
                        expand = c(0, 0),
                        labels = scales::percent_format(accuracy = 1))
