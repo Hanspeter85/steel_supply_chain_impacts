@@ -95,14 +95,14 @@ plot_IDA <- function(set_region)
                                       size = 1)) +
     guides(fill = guide_legend(theme = theme(legend.title.position="top"), title.hjust = 0.5)) +
     scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen", "yellow"),
-                      name = "Cross-Country Decomposition Effects:",
+                      name = "Cross-regional Index Decomposition Analysis (IDA) Factors:",
                       labels = c("Per-Capita Steel-GAS",
                                  "IO-MF/Steel-GAS",
                                  "eLand-steel/IO-MF", 
                                  "eHANPP-steel/eLand-steel",
                                  "Delta-TOTAL")) +
     geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-    scale_y_continuous(str_c("Per-capita eHANPP-steel of ", set_region),
+    scale_y_continuous(str_c(set_region," per-cap eHANPP-steel"),
                        breaks = seq(-25,25,0.2),
                        expand = c(0, 0),
                        labels = scales::percent_format(accuracy = 1))
@@ -111,10 +111,10 @@ plot_IDA <- function(set_region)
 }
 
 plot_Europe <- plot_IDA("Europe") + theme(legend.position = "none")
-plot_China <- plot_IDA("China") + theme(legend.position = "none")
-plot_Global <- plot_IDA("Global Average") + theme(legend.position = "top")
+plot_China <- plot_IDA("China") + theme(legend.position = "top")
+plot_Global <- plot_IDA("Global Average") + theme(legend.position = "none")
 
-plot_grid(plotlist = list(plot_Global, NULL, plot_China, NULL, plot_Europe), 
+plot_grid(plotlist = list(plot_China, NULL, plot_Europe, NULL, plot_Global), 
           axis = "l", 
           nrow = 5, 
           rel_heights = c(1.2,0.02, 1, 0.02 ,1),
