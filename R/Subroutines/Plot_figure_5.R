@@ -110,21 +110,30 @@ plot_IDA <- function(set_region)
   return(plot)
 }
 
-plot_Europe <- plot_IDA("Europe") + theme(legend.position = "none")
 plot_China <- plot_IDA("China") + theme(legend.position = "top")
-plot_Global <- plot_IDA("Global Average") + theme(legend.position = "none")
-
-plot_grid(plotlist = list(plot_China, NULL, plot_Europe, NULL, plot_Global), 
-          axis = "l", 
-          nrow = 5, 
-          rel_heights = c(1.2,0.02, 1, 0.02 ,1),
-          labels = c("A)",NA,"B)",NA,"C)"))
-
-# plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 
 ggsave("./output/Fig_5.png",
        plot = last_plot(),  
        width = 13,  
-       height = 16,  
+       height = 7,  
+       dpi = 1850,
+       bg = "white") 
+
+
+plot_Europe <- plot_IDA("Europe") + theme(legend.position = "top")
+plot_Global <- plot_IDA("Global Average") + theme(legend.position = "none")
+
+plot_grid(plotlist = list(plot_Europe, NULL, plot_Global), 
+          axis = "l", 
+          nrow = 3, 
+          rel_heights = c(1,0.02, 1),
+          labels = c("A)",NA,"B)"))
+
+# plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
+
+ggsave("./output/Fig_5_SI.png",
+       plot = last_plot(),  
+       width = 13,  
+       height = 10,  
        dpi = 1850,
        bg = "white") 

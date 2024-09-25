@@ -255,5 +255,20 @@ ggsave("./output/Fig_4.png",
        width = 14,  
        height = 12,  
        dpi = 1850,
-       bg = "white") 
+       bg = "white")
+
+
+plot_grid(plot_2, plot_1 + theme(legend.position = "none"), 
+          ncol = 2,
+          rel_widths = c(1.28,0.9),
+          labels = c("A)","B)"))
+
+ggsave("./output/Fig_4_SI.png",
+       plot = last_plot(),  
+       width = 14,  
+       height = 7,  
+       dpi = 1850,
+       bg = "white")
+
+
 
