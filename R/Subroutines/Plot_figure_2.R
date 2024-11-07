@@ -168,20 +168,27 @@ plot_1 <- plot_1 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = 
 plot_2 <- plot_2 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 plot_3 <- plot_3 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 
+# Plot final product footprints to be included in SI
+ggsave("./output/Fig_2_SI.png",  # File name for the saved plot
+       plot = last_plot(),  # The last plot created in the session
+       width = 13,  # Width of the plot in inches
+       height = 6,  # Height of the plot in inches
+       dpi = 1850,
+       bg = "white")  # Resolution (dots per inch), adjust as needed
+
+
 # Scale the plots and add "empty" rows to customize margins of plots
 plot_grid(plot_1, 
           NULL, 
-          plot_3, 
-          NULL, 
           plot_2, 
           align = "v", 
-          nrow = 5, 
-          rel_heights = c(1,0.05, 1.1, 0.05 ,1.2),
-          labels = c("A)", NA,"B)",NA,"C)"))
+          nrow = 3, 
+          rel_heights = c(1,0.05, 1.2),
+          labels = c("A)", NA,"B)"))
 
 ggsave("./output/Fig_2.png",  # File name for the saved plot
        plot = last_plot(),  # The last plot created in the session
        width = 13,  # Width of the plot in inches
-       height = 16,  # Height of the plot in inches
+       height = 13,  # Height of the plot in inches
        dpi = 1850,
        bg = "white")  # Resolution (dots per inch), adjust as needed
