@@ -258,7 +258,7 @@ plot_grid(plot_1_2,
           label_y = -0.05)
 
 
-ggsave("./output/Fig_1.png",  # File name for the saved plot
+ggsave("./output/Fig_1.pdf",  # File name for the saved plot
        plot = last_plot(),  # The last plot created in the session
        width = 13,  # Width of the plot in inches
        height = 13,  # Height of the plot in inches

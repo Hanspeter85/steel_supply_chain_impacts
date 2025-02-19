@@ -112,7 +112,7 @@ plot_IDA <- function(set_region)
 
 plot_China <- plot_IDA("China") + theme(legend.position = "top")
 
-ggsave("./output/Fig_5.png",
+ggsave("./output/Fig_5.pdf",
        plot = last_plot(),  
        width = 13,  
        height = 7,  

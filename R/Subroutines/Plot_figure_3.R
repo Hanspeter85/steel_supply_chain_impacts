@@ -193,7 +193,7 @@ plot_grid(plotlist = list(plot_3, NULL, plot_1,NULL,plot_2),
 
 # plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 
-ggsave("./output/Fig_3.png",
+ggsave("./output/Fig_3.pdf",
        plot = last_plot(),  
        width = 13,  
        height = 16,  

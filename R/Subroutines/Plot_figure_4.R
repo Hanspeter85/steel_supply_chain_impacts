@@ -250,7 +250,7 @@ plot_grid(plot_3,
           nrow = 2,
           labels = c(NULL, "A)"))
 
-ggsave("./output/Fig_4.png",
+ggsave("./output/Fig_4.pdf",
        plot = last_plot(),  
        width = 14,  
        height = 12,  
