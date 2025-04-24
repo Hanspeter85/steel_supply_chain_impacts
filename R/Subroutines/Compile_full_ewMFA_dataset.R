@@ -79,4 +79,35 @@ ewMFA["Stocks"] <- Stock_data
 ewMFA <- Agg( as.matrix(ewMFA[,4:16]), aggkey = ewMFA$Region_new, dim = 1 )
 ewMFA <- as.data.frame(ewMFA)
 
+# Additional check of steel stock time series to see if China overtakes Europe post 2014
+
+conco_check <- Conco$EXIO_2_base %>% 
+  as.data.frame() %>% 
+  mutate("EXIO" = EXIO_reg_list$Abbrev) %>% 
+  pivot_longer(cols = base$region$Abbrev, names_to = "PIOT") %>% 
+  filter(value != 0) %>% 
+  select(-value)
+
+dat <- read.csv(file = paste0(path$MISO2,"global_v1_enduse.csv"))
+colnames(dat)[6:202] <- 1820:2016
+
+tmp_stocks <- dat %>% 
+  filter(name == "S10_stock_enduse", material == "iron_steel") %>% 
+  pivot_longer(col = as.character(1820:2016), names_to = "year") %>% 
+  left_join(Conco_EXIO2MISO, by = c("region" = "MISO_names")) %>% 
+  left_join(conco_check,
+            by = c("EXIOBASE_iso2" = "EXIO")) %>% 
+  left_join(base$region %>% 
+              select(Abbrev, Region_new),
+            by = c("PIOT" = "Abbrev")) %>% 
+  group_by(Region_new, year) %>% 
+  summarize(value = sum(value), .groups = 'drop') %>% 
+  filter(year %in% 2014:2016,
+         Region_new %in% c("China", "Europe")) 
+
+ggplot(data = tmp_stocks, aes(x = year, y = value)) +
+  geom_line()
+
+
+
 # write.xlsx(x = ewMFA, file = "./output/ewMFA_indicators_13_world_regions.xlsx", rowNames = TRUE)
