@@ -79,8 +79,14 @@ data_SI <- vector(mode = "list", length = 0)
 data_SI[["1_1"]] <- dat
 
 plot_1 <- ggplot() +
-  geom_col(data = dat, aes(x = stressor_group, y = value, fill = source_region_group), 
-           position = position_stack(reverse = FALSE)) +
+  geom_col_pattern(data = dat, aes(x = stressor_group,
+                                   y = value,
+                                   fill = source_region_group,
+                                   pattern = source_region_group),
+                   pattern_fill = "grey30",
+                   pattern_spacing = 0.03,
+                   position = position_stack(reverse = FALSE)) +
+  scale_pattern_manual(values=c(rep("none", 9),"stripe", "crosshatch", "circle")) +
   theme_minimal() +
   scale_fill_manual(values = reg_color_Fig1$color) +
   scale_y_continuous("Extraction [Mt/year]",
@@ -105,6 +111,7 @@ plot_1 <- ggplot() +
         panel.grid.minor.y = element_line(linetype = "dashed"), 
         panel.border = element_rect(color = "lightgrey", fill = NA, linewidth = 0.5)) +
   geom_vline(xintercept = seq(0.5, 7, by = 1), color="gray", linewidth=.5, alpha=.5)
+
 
 
 
@@ -139,8 +146,16 @@ x_labels <- c(
               "Mining\nHANPP\n[2.98 MtC/year]")
 
 plot_2 <- ggplot() +
-  geom_bar(data = dat, aes(x = stressor, y = value, fill = source_region_group), 
-           stat = "identity", position = "fill") +
+  geom_bar_pattern(data = dat,
+                   aes(x = stressor,
+                       y = value,
+                       fill = source_region_group,
+                       pattern = source_region_group),
+                   pattern_fill = "grey30",
+                   pattern_spacing = 0.03,
+                   stat = "identity",
+                   position = "fill") +
+  scale_pattern_manual(values=c(rep("none", 9),"stripe", "crosshatch", "circle")) +
   theme_minimal() +
   scale_fill_manual(values = reg_color_Fig1$color) +
   theme(legend.position = "left",
@@ -206,7 +221,10 @@ reg_symbol_Global <- c(18, reg_symbol)
 reg_color_Global <- c("red", reg_color)
 }
 
-plot_3 <- ggplot( data = dat, aes(x = gC_per_m2, y = m2_per_t, group =  source_region_group) ) +
+plot_3 <- ggplot( data = dat,
+                  aes(x = gC_per_m2,
+                      y = m2_per_t,
+                      group =  source_region_group) ) +
   geom_point(size = 5, aes(shape = source_region_group, color = source_region_group ) ) +
   theme_minimal() +
   coord_fixed(ratio = (1000/9)) +

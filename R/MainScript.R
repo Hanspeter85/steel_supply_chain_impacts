@@ -13,6 +13,7 @@ library(scales)
 library(ggpubr)
 library(cowplot)
 library(data.table)
+library(ggpattern)
 
 
 # Set parameters to select raw data files (version and/or year) for the construction of PIOTs
