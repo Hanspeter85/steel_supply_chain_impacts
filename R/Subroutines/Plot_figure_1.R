@@ -49,7 +49,7 @@ biome_color <- biome_color[c(6,1,3,5,2,4)]
 Biome_label <- Results_agg_biome %>% 
   group_by(stressor_group) %>% 
   summarise(value = sum(value)) %>% 
-  arrange(desc(value)) %>% 
+  arrange(-desc(value)) %>% 
   left_join(tmp, by = "stressor_group") %>% 
   ungroup() %>% 
   add_column("color" = biome_color)
@@ -71,6 +71,8 @@ dat <- Results_agg_biome %>%
   mutate(stressor_group = factor(stressor_group, levels = Biome_label$stressor_group))
 
 
+
+
 # Empty list for saving data of figures for SI
 data_SI <- vector(mode = "list", length = 0)
 
@@ -83,7 +85,8 @@ plot_1 <- ggplot() +
   scale_fill_manual(values = reg_color_Fig1$color) +
   scale_y_continuous("Extraction [Mt/year]",
                      expand = c(0,0),
-                     breaks = seq(0,1500,200)) +
+                     breaks = seq(0,1500,200),
+                     position = "right") +
   scale_x_discrete(labels = Biome_label$plot,
                    name = "Biome of Iron Ore Mining",
                    expand = c(0,0)) +
@@ -102,6 +105,8 @@ plot_1 <- ggplot() +
         panel.grid.minor.y = element_line(linetype = "dashed"), 
         panel.border = element_rect(color = "lightgrey", fill = NA, linewidth = 0.5)) +
   geom_vline(xintercept = seq(0.5, 7, by = 1), color="gray", linewidth=.5, alpha=.5)
+
+
 
 plot_1
 
@@ -240,12 +245,14 @@ plot_3
 
 
 # Scale the plots and add "empty" rows to customize margins of plots
-plot_1_2 <- plot_grid(plot_1 + theme(legend.position.inside = c(0.87, 0.5)),
+plot_1_2 <- plot_grid(plot_2 + theme(legend.position = "none",
+                                     plot.margin = unit(c(0.5, 0.5, 0.5, 1.5), "cm")),
                       NULL,
-                      plot_2 + theme(legend.position = "none"),
+                      plot_1 + theme(legend.position.inside = c(0.1, 0.5)),
                       ncol = 3,
-                      rel_widths = c(1,0.06,0.6),
+                      rel_widths = c(0.7,0.06,1),
                       labels = c("A)","B)"))
+
 
 plot_grid(plot_1_2, 
           NULL, 

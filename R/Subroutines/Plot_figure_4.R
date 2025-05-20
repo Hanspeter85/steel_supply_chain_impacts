@@ -180,7 +180,7 @@ data_SI[["4_2"]] <- dat_percap
 dat_percap$destination_region_group[dat_percap$destination_region_group == "United States"] <- "United\nStates"
 dat_percap$destination_region_group[dat_percap$destination_region_group == "Asia and Pacific (nec)"] <- "Asia &\nPacific\n(nec)"
 dat_percap$destination_region_group[dat_percap$destination_region_group == "Middle East"] <- "Middle\nEast"
-dat_percap$destination_region_group[dat_percap$destination_region_group == "South America (nec)"] <- "South\nAmerica\n(nec)"
+dat_percap$destination_region_group[dat_percap$destination_region_group == "Latin America (nec)"] <- "Latin\nAmerica\n(nec)"
 
 # Sort in descending eHANPP order
 reg_sort_eHANPP <- dat_percap %>% 
@@ -251,9 +251,9 @@ plot_grid(plot_3,
           labels = c(NULL, "A)"))
 
 ggsave("./output/Fig_4.pdf",
-       plot = last_plot(),  
+       plot = plot_3,  
        width = 14,  
-       height = 12,  
+       height = 7,  
        dpi = 1850,
        bg = "white")
 

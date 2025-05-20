@@ -161,7 +161,7 @@ plot_3
 # For better readability change axis labels of regions and color to black
 
 reg_name_plot <- c("China", "Europe", "United\nStates", "Asia &\nPacific(nec)", "Japan",
-                   "Middle\nEast", "South\nAmerica(nec)", "India", "Africa", "Russia", "Canada",
+                   "Middle\nEast", "Latin\nAmerica(nec)", "India", "Africa", "Russia", "Canada",
                    "Brazil", "Australia")
 
 plot_1 <- plot_1 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))

@@ -68,6 +68,18 @@ remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Wat
        Build_IOT, Calc_ewMFA, Calc_FP, Load_IOCodes, Load_population_data, Load_SUT, Plot_HeadlineIndicators,
        Run_Hypothetical_Extraction_Method)
 
+# Rename South America as Latin America (nec)
+Results_agg$source_region_group[Results_agg$source_region_group == "South America (nec)"] <- "Latin America (nec)"
+Results_agg$destination_region_group[Results_agg$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+Results_agg_biome$source_region_group[Results_agg_biome$source_region_group == "South America (nec)"] <- "Latin America (nec)"
+Results_agg_biome$destination_region_group[Results_agg_biome$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+rownames(ewMFA)[rownames(ewMFA) == "South America (nec)"] <- "Latin America (nec)"
+IDA_data$destination_region_group[IDA_data$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+pop_IDA$destination_region_group[pop_IDA$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+colnames(result_IDA_China)[colnames(result_IDA_China) == "South America (nec)"] <- "Latin America (nec)"
+colnames(result_IDA_Europe)[colnames(result_IDA_Europe) == "South America (nec)"] <- "Latin America (nec)"
+colnames(result_IDA_Global)[colnames(result_IDA_Global) == "South America (nec)"] <- "Latin America (nec)"
+region_list_IDA[region_list_IDA == "South America (nec)"] <- "Latin America (nec)"
 
 # Create figures
 source("./R/Subroutines/Plot_figure_1.R")

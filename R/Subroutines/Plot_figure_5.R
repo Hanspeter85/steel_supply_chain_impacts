@@ -52,7 +52,7 @@ data_SI[["5"]] <- dat
 dat$other_region[dat$other_region == "United States"] <- "United\nStates"
 dat$other_region[dat$other_region == "Asia and Pacific (nec)"] <- "Asia &\nPacific\n(nec)"
 dat$other_region[dat$other_region == "Middle East"] <- "Middle\nEast"
-dat$other_region[dat$other_region == "South America (nec)"] <- "South\nAmerica\n(nec)"
+dat$other_region[dat$other_region == "Latin America (nec)"] <- "Latin\nAmerica\n(nec)"
 dat$other_region[dat$other_region == "Global"] <- "Global\nAverage"
 
 dat$destination_region_group[dat$destination_region_group == "Global"] <- "Global Average"
@@ -65,6 +65,7 @@ dat_tot <- dat %>% filter(effect == "TOTAL_delta")
 
 dat <- dat %>% filter(effect != "TOTAL_delta")
 
+legend_text_size <- 14
 
 # set_region <- "Global"
 plot_IDA <- function(set_region)
@@ -96,10 +97,10 @@ plot_IDA <- function(set_region)
     guides(fill = guide_legend(theme = theme(legend.title.position="top"), title.hjust = 0.5)) +
     scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen", "yellow"),
                       name = "Cross-regional Index Decomposition Analysis (IDA) Factors:",
-                      labels = c("Per-Capita Steel-GAS",
-                                 "IO-MF/Steel-GAS",
-                                 "eLand-steel/IO-MF", 
-                                 "eHANPP-steel/eLand-steel",
+                      labels = c("Consumption level\n(per-cap Steel-GAS)",
+                                 "Production structure\n(IO-MF/Steel-GAS)",
+                                 "Land requirements\n(eLand-steel/IO-MF)", 
+                                 "Land use intensity\n(eHANPP-steel/eLand-steel)",
                                  "Delta-TOTAL")) +
     geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
     scale_y_continuous(str_c(set_region," per-cap eHANPP-steel"),

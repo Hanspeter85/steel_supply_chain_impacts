@@ -137,7 +137,7 @@ data_SI[["3_3"]] <- dat
 dat$destination_region_group[dat$destination_region_group == "United States"] <- "United\nStates"
 dat$destination_region_group[dat$destination_region_group == "Asia and Pacific (nec)"] <- "Asia &\nPacific(nec)"
 dat$destination_region_group[dat$destination_region_group == "Middle East"] <- "Middle\nEast"
-dat$destination_region_group[dat$destination_region_group == "South America (nec)"] <- "South\nAmerica(nec)"
+dat$destination_region_group[dat$destination_region_group == "Latin America (nec)"] <- "Latin\nAmerica(nec)"
 
 dat <- dat %>% mutate(destination_region_group = factor(destination_region_group, levels = reg_name_plot))
 
@@ -185,11 +185,11 @@ plot_3 <- ggplot(dat) +
 plot_3
 
 # Scale the plots and add "empty" rows to customize margins of plots
-plot_grid(plotlist = list(plot_3, NULL, plot_1,NULL,plot_2),
+plot_grid(plotlist = list(plot_1, NULL, plot_2,NULL,plot_3),
           axis = "l",
           nrow = 5,
           labels = c("A)",NA, "B)",NA, "C)"), 
-          rel_heights = c(1.2,0.02, 1, 0.02 ,1))
+          rel_heights = c(1,0.02, 1, 0.02 ,1.2))
 
 # plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 
