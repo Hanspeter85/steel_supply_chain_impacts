@@ -14,7 +14,7 @@ library(ggpubr)
 library(cowplot)
 library(data.table)
 library(ggpattern)
-
+library(Matrix)
 
 # Set parameters to select raw data files (version and/or year) for the construction of PIOTs
 job <<- list("date" = "20201218",
@@ -35,7 +35,8 @@ path <<- list("input" = paste0(github,"/steel_supply_chain_impacts/input/"),
               "repo" = paste0(github,"/steel_supply_chain_impacts"),
               "SI" = paste0(github,"/steel_supply_chain_impacts/output/SI"),
               "concordance" = paste0(github,"/steel_supply_chain_impacts/input/Concordances/"),
-              "subroutines" = paste0(github,"/steel_supply_chain_impacts/R/Subroutines"))
+              "subroutines" = paste0(github,"/steel_supply_chain_impacts/R/Subroutines"),
+              "EXIO" = "C:/Users/hwieland/Data/EXIOBASE/v3_9_5/pxp/")
 
 # Set path to MISO2 data
 path[["MISO2"]] <- "C:/Users/hwieland/Data/MISO2/"
@@ -44,15 +45,22 @@ path[["MISO2"]] <- "C:/Users/hwieland/Data/MISO2/"
 ## Load functions and general data frames into workspace
 source( paste0(path$subroutines,"/Load_Routines.R") )
 
+
 ## Create supply use tables from raw data and compile IO model
 SUT <<- Load_SUT(type = "Results")                    
 IOT <<- Build_IOT(SUT = SUT,mode = "ixi")                          
 
+## Compile EXIOBASE for comparison
+source( paste0(path$subroutines,"/Load_EXIOBASE.R") )
+
 ## Build extensions
 source( paste0(path$subroutines,"/Build_Extension.R") )
 
-# Calculate footprints
+# Calculate footprints with GPIOT
 source("./R/Subroutines/Footprint_calculation.R")
+
+# Calculate footprints with EXIOBASE GMIOT and plot comparisons
+source("./R/Subroutines/Footprint_calculation_EXIOBASE.R")
 
 # Create ew-MFA data set with all accounts including stocks
 source("./R/Subroutines/Compile_full_ewMFA_dataset.R")
@@ -62,7 +70,7 @@ source("./R/Subroutines/Calc_IDA.R")
 
 # Remove unnecessary objects
 remove(job, github, Stock_data, pop, tmp, Conco, Conco_EXIO2MISO, EXIO_reg_list, num, pop_agg, result_IDA,
-       Results, IOT, SUT, root, path, base, Code, agg_key_biome, enduse_order, region_agg, supply)
+       Results, IOT, SUT, root, base, Code, agg_key_biome, enduse_order, region_agg, supply)
 
 # Remove unnecessary functions
 remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Water_Score, Build_Extension_Biomes,
@@ -70,17 +78,26 @@ remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Wat
        Run_Hypothetical_Extraction_Method)
 
 # Rename South America as Latin America (nec)
-Results_agg$source_region_group[Results_agg$source_region_group == "South America (nec)"] <- "Latin America (nec)"
-Results_agg$destination_region_group[Results_agg$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
-Results_agg_biome$source_region_group[Results_agg_biome$source_region_group == "South America (nec)"] <- "Latin America (nec)"
-Results_agg_biome$destination_region_group[Results_agg_biome$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
-rownames(ewMFA)[rownames(ewMFA) == "South America (nec)"] <- "Latin America (nec)"
-IDA_data$destination_region_group[IDA_data$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
-pop_IDA$destination_region_group[pop_IDA$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
-colnames(result_IDA_China)[colnames(result_IDA_China) == "South America (nec)"] <- "Latin America (nec)"
-colnames(result_IDA_Europe)[colnames(result_IDA_Europe) == "South America (nec)"] <- "Latin America (nec)"
-colnames(result_IDA_Global)[colnames(result_IDA_Global) == "South America (nec)"] <- "Latin America (nec)"
-region_list_IDA[region_list_IDA == "South America (nec)"] <- "Latin America (nec)"
+{
+  SI$IOMF_eLand_eHANPP_GAS$source_region_group[SI$IOMF_eLand_eHANPP_GAS$source_region_group == "South America (nec)"] <- "Latin America (nec)"
+  SI$IOMF_eLand_eHANPP_GAS$destination_region_group[SI$IOMF_eLand_eHANPP_GAS$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+  SI$`IO-MF-biome`$source_region_group[SI$`IO-MF-biome`$source_region_group == "South America (nec)"] <- "Latin America (nec)"
+  SI$`IO-MF-biome`$destination_region_group[SI$`IO-MF-biome`$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+  Results_agg$source_region_group[Results_agg$source_region_group == "South America (nec)"] <- "Latin America (nec)"
+  Results_agg$destination_region_group[Results_agg$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+  Results_agg_biome$source_region_group[Results_agg_biome$source_region_group == "South America (nec)"] <- "Latin America (nec)"
+  Results_agg_biome$destination_region_group[Results_agg_biome$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+  rownames(ewMFA)[rownames(ewMFA) == "South America (nec)"] <- "Latin America (nec)"
+  IDA_data$destination_region_group[IDA_data$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+  pop_IDA$destination_region_group[pop_IDA$destination_region_group == "South America (nec)"] <- "Latin America (nec)"
+  colnames(result_IDA_China)[colnames(result_IDA_China) == "South America (nec)"] <- "Latin America (nec)"
+  colnames(result_IDA_Europe)[colnames(result_IDA_Europe) == "South America (nec)"] <- "Latin America (nec)"
+  colnames(result_IDA_Global)[colnames(result_IDA_Global) == "South America (nec)"] <- "Latin America (nec)"
+  region_list_IDA[region_list_IDA == "South America (nec)"] <- "Latin America (nec)"
+  
+  write.xlsx(SI, str_c(path$repo,"/output/Full_detail_2014_footprint_accounts_in_from_to_format.xlsx"))
+}
+
 
 # Create figures
 source("./R/Subroutines/Plot_figure_1.R")
@@ -92,11 +109,6 @@ source("./R/Subroutines/Plot_figure_5.R")
 
 # Write data of figures for SI to file
 write.xlsx(data_SI, "./output/Figure_data_for_SI.xlsx")
-
-
-
-
-
 
 
 

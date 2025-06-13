@@ -37,14 +37,20 @@ dat_stock <- dat %>% filter(Indicator == "Stocks") %>%
 
 # Create plot
 plot_1 <- ggplot() +
-  geom_bar(data = dat_flow, aes(x = Region, y = Value, fill = Indicator) ,stat = "identity",position = "dodge",colour="black") +
+  geom_bar(data = dat_flow,
+           aes(x = Region, 
+               y = Value, 
+               fill = Indicator),
+           stat = "identity",
+           position = "dodge",
+           colour="black") +
   geom_point(data = dat_stock, aes(x = Region, y = Value, fill = Indicator), shape = 21, color = "black", size = 4) +
   theme_minimal() +
   scale_fill_manual(labels = c("Domestic Extraction (DE; left axis)",
                                "Iron Ore Material Footprint (IO-MF; left axis)",
                                "Steel Use (Steel-GAS; left axis)",
                                "Steel Stocks (right axis)"),
-                    values = c("#4472C4", "#ED7D31", "#FFC000", "yellow")) +
+                    values = c("blue", "orange", "grey", "yellow")) +
   theme(legend.title = element_blank(),
         legend.position = c(0.7, 0.8),
         legend.background = element_rect(color = "lightgray",fill = "gray97", linewidth = 0.2),
@@ -90,7 +96,14 @@ IM_share <- Results_agg %>% filter(stressor == "RMC") %>% ungroup() %>%
   mutate(value = Import/(Import+Domestic)) %>% 
   select(-Import, -Domestic) %>%  
   mutate( destination_region_group = factor(destination_region_group, levels = reg_sort_RMC) ) %>% 
-  mutate(Indicator = "Import Share")
+  mutate("source_region_group" = "Import Share")
+
+tmp <- c( dat$source_region_group %>% levels(), IM_share$source_region_group %>% unique() )
+
+
+dat$source_region_group <- factor( dat$source_region_group, levels = tmp )
+IM_share$source_region_group <- factor( IM_share$source_region_group, levels = tmp )
+
 
 data_SI[["2_2_1"]] <- dat
 data_SI[["2_2_2"]] <- IM_share
@@ -99,10 +112,27 @@ data_SI[["2_2_2"]] <- IM_share
 reg_color_IM <- c( reg_color, "yellow" )
 
 plot_2 <- ggplot() +
-  geom_bar(data = dat, aes(x = destination_region_group, y = value, fill = source_region_group), stat = "identity", position = "fill") +
-  geom_point(data = IM_share, aes(x = destination_region_group, y = value, fill = Indicator),  shape = 21, color = "black", size = 4) +
-  theme_minimal() +
+  geom_bar_pattern(data = dat,
+                   aes(x = destination_region_group,
+                       y = value,
+                       fill = source_region_group,
+                       pattern = source_region_group),
+                   pattern_fill = "grey30",
+                   pattern_spacing = 0.03,
+                   stat = "identity",
+                   position = "fill") +
+  scale_pattern_manual(values=c(rep("none", 9),"stripe", "crosshatch", "circle")) +
+  geom_point(data = IM_share,
+             aes(x = destination_region_group,
+                 y = value,
+                 fill = source_region_group),
+             shape = 21,
+#             color = "black",
+             size = 4) +
+  theme_minimal() + 
   scale_fill_manual(values = reg_color_IM) +
+  guides(fill = guide_legend(override.aes = list(pattern = c(rep("none", 9), "stripe", "crosshatch", "circle","none"))),
+         pattern = "none") +
   theme(legend.title = element_blank(),
 #        legend.position = c(0.7, 0.8),
         legend.position = "bottom",

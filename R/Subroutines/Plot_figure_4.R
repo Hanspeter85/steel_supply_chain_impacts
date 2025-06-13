@@ -201,8 +201,10 @@ dat_percap <- dat_percap %>%
 plot_3 <- ggplot(dat_percap) +
   geom_bar(aes(x = stressor, y = value, fill = stressor),
            position = "stack",
-           stat = "identity") +
-  facet_grid(~destination_region_group) +
+           stat = "identity",
+           color = "black") +
+  facet_grid(~destination_region_group,
+             space = "free") +
   theme_minimal() +
   theme(legend.position = "inside",
        legend.position.inside = c(0.8, 0.8),
@@ -221,14 +223,14 @@ plot_3 <- ggplot(dat_percap) +
         panel.border = element_rect(color = "lightgrey", fill = NA, linewidth = 0.5),
         strip.text = element_text(size = 12.5, face = "bold")) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), 
-             color="gray", 
+             color="gray20", 
              size=.5, 
              alpha=.5) +
   scale_y_continuous(breaks = seq(0,2.1,0.25),
                      expand = c(0,0)) +
-  scale_x_discrete(expand = c(0,0)) +
-  scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen"),
-                    name = "Per-capita Indicators:",
+  scale_x_discrete(expand = c(0.2,0.2)) +
+  scale_fill_manual(values = c("grey", "orange", "yellow3", "forestgreen"),
+                    name = "Per-capita Consumption Indicators:",
                     labels = c("Steel use; Steel-GAS [t/cap/year]",
                                "Iron Ore Material Footprint; IO-MF [t/cap/year]",
                                "Embodied Land; eLand-steel [m²/cap]", 

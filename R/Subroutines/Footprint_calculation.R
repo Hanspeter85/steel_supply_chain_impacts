@@ -73,83 +73,7 @@
   colnames(Results)[9:10] <- c("destination_region_group","source_region_group")
   
   
-  
-  # ## Next we compute index-based indicators
-  # 
-  # # Get indices for iron ore extraction and select relevant cells in extension
-  # index <- Code$Z[ Code$Z$SectorCode == 1, ]
-  # E_index_new <- E_index[index$SectorIndex,]
-  # 
-  # # Set AWARE indices for neighboring countries accordingly
-  # E_index_new[8,2] <- E_index_new[29,2]   # Set Greece index to RoW Europe
-  # E_index_new[13,2] <- E_index_new[29,2]   # Set Slovakia index to RoW Europe
-  # E_index_new[14,2] <- E_index_new[29,2]   # Set UK index to RoW Europe
-  # E_index_new[26,2] <- E_index_new[27,2]   # Set Indonesia index to RoW Asia
-  # 
-  # # Use average for all other regions (note that the missing indices refer to regions with less than 1t of extraction)
-  # E_index_new <- as.data.frame(E_index_new)
-  # E_index_new$AWARE[E_index_new$AWARE == 0] <- mean(E_index_new$AWARE[E_index_new$AWARE != 0])
-  # 
-  # # i <- 1
-  # for(i in 1:2)
-  # {
-  #   # Calculate RMC
-  #   MP <- IOT_model$L * intens[,1]
-  #   RMC <- MP %*% Y
-  #   RMC <- Agg(RMC, Code$Z$RegionCode, 1)
-  #   
-  #   # Multiply embodied flows with indices
-  #   RMC_index <- RMC * E_index_new[,i]
-  #   
-  #   RMC <- Agg(RMC, aggkey = base$region$Region_new, 2)
-  #   RMC <- Agg(RMC, aggkey = base$region$Region_new, 1)
-  #   
-  #   RMC_index <- Agg(RMC_index, aggkey = base$region$Region_new, 2)
-  #   RMC_index <- Agg(RMC_index, aggkey = base$region$Region_new, 1)
-  #   
-  #   DE_index <- rowSums(RMC_index) / rowSums(RMC)
-  #   RMC_index <- colSums(RMC_index) / colSums(RMC)
-  #   
-  #   if(i == 1)
-  #   {
-  #     Result_DE_index_regions <- data.frame("Region" = names(DE_index),
-  #                                           "DE" = rowSums(RMC),
-  #                                           "Biodiversity_Carbon_Water_index" = DE_index,
-  #                                           "AWARE_index" = NA)
-  #     
-  #     Result_RMC_index_regions <- data.frame("Region" = names(RMC_index),
-  #                                            "RMC" = colSums(RMC),
-  #                                            "Biodiversity_Carbon_Water_index" = RMC_index,
-  #                                            "AWARE_index" = NA)
-  #   }else
-  #   {
-  #     Result_DE_index_regions$AWARE_index <- DE_index
-  #     Result_RMC_index_regions$AWARE_index <- RMC_index
-  #   }
-  # }
-  # 
-  # # Add trade shares
-  # Result_DE_index_regions["EX_share"] <- (rowSums(RMC)-diag(RMC))/rowSums(RMC)
-  # Result_RMC_index_regions["IM_share"] <- (colSums(RMC)-diag(RMC))/colSums(RMC)
-  # 
-  # 
-  # RMC_sec <- t( t(MP) * rowSums(Y) )
-  # RMC_sec <- Agg(RMC_sec, Code$Z$RegionCode, 1)
-  # RMC_sec <- Agg(RMC_sec, base$region$Region_new, 1)
-  # RMC_sec <- Agg(RMC_sec, Code$Z$SectorCode, 2)
-  # RMC_sec <- RMC_sec[,20:29]
-  # colnames(RMC_sec) <- base$industry$Name[20:29]
-  # 
-  # list_of_tables <- list("DE_index" = Result_DE_index_regions,
-  #                        "RMC_index" = Result_RMC_index_regions,
-  #                        "RMC" = RMC,
-  #                        "RMC_sec" = RMC_sec)
-  # 
-  # write.xlsx(list_of_tables, file = "./output/Index_assessment_iron_steel_2014_aggregated_regions.xlsx")
-  
-  
   ## Calculate RMC by type of biome
-  
   # Set aggregation key for biomes
   agg_key_biome <- data.frame("stressor" = colnames(E_flow)[1:12],
                               "stressor_group" = c("Temperate Forests & Grasslands", "Deserts & Xeric Shrublands", "Mediterranean Forests & Woodlands", "Temperate Forests & Grasslands",
@@ -227,6 +151,30 @@
     mutate(source = ifelse(source_region_group == destination_region_group, "Domestic", "Import")) %>% 
     left_join(agg_key_enduse, by = "final_demand") %>% 
     mutate(end_use = factor(end_use, levels = enduse_order))
-    
+  
+  # Full detail data sets for paper SI
+  SI <- list()
+  SI[["IOMF_eLand_eHANPP_GAS"]] <- Results %>% 
+    left_join(agg_key_enduse, by = c("final_demand")) %>% 
+    rename("end_use_group" = "end_use",
+           "end_use" = "final_demand") %>% 
+    select(source_region, destination_region, source_region_group, destination_region_group,
+           end_use, end_use_group, stressor, unit, value) %>% 
+    mutate(stressor = case_when(stressor == "RMC" ~ "IO-MF",
+                                stressor == "eLand" ~ "eLand-steel",
+                                stressor == "eHANPP" ~ "eHANPP-steel",
+                                stressor == "Steel_GAS" ~ "Steel-GAS")) %>% 
+    filter(value >= 1)
+  
+  SI[["IO-MF-biome"]] <- Results_sector_biomes %>% 
+    left_join(agg_key_enduse, by = c("final_demand")) %>% 
+    rename("end_use_group" = "end_use",
+           "end_use" = "final_demand") %>% 
+    select(source_region, destination_region, source_region_group, destination_region_group,
+           end_use, end_use_group, stressor, stressor_group, unit, value) %>% 
+    filter(value >= 1)
+  
+  
+  
   remove(Results_sector_biomes)
   

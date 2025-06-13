@@ -72,7 +72,8 @@ plot_IDA <- function(set_region)
 {
   plot <- ggplot() +
     geom_col(data = dat %>% filter(destination_region_group == set_region), 
-             aes(x = other_region, y = value, fill = effect)) +
+             aes(x = other_region, y = value, fill = effect),
+             color = "black") +
     geom_point(data = dat_tot %>% filter(destination_region_group == set_region), 
                aes(x = other_region, y = value, fill = effect),  
                shape = 21, 
@@ -95,7 +96,7 @@ plot_IDA <- function(set_region)
                                       fill = NA, 
                                       size = 1)) +
     guides(fill = guide_legend(theme = theme(legend.title.position="top"), title.hjust = 0.5)) +
-    scale_fill_manual(values = c("royalblue", "tomato3", "yellow3", "forestgreen", "yellow"),
+    scale_fill_manual(values = c("grey", "orange", "yellow3", "forestgreen", "yellow"),
                       name = "Cross-regional Index Decomposition Analysis (IDA) Factors:",
                       labels = c("Consumption level\n(per-cap Steel-GAS)",
                                  "Production structure\n(IO-MF/Steel-GAS)",
@@ -105,7 +106,7 @@ plot_IDA <- function(set_region)
     geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
     scale_y_continuous(str_c(set_region," per-cap eHANPP-steel"),
                        breaks = seq(-25,25,0.2),
-                       expand = c(0, 0),
+                       expand = c(0.02, 0.02),
                        labels = scales::percent_format(accuracy = 1))
   
   return(plot)

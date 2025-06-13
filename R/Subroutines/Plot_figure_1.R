@@ -7,7 +7,7 @@
 # Set font/text size for figures
 legend_text_size <- 12
 axis_title_size <- 14
-axis_text_size <- 12
+axis_text_size <- 11
 
 # Get sorting of regions in descending order of RMC and DEC
 reg_sort_RMC <- ewMFA %>% mutate("Region" = rownames(ewMFA)) %>% select(Region, RMC) %>% 
@@ -216,7 +216,7 @@ data_SI[["1_3"]] <- dat
 
 # Select symbols for point shapes of regions
 #reg_symbol <- c(21,21,21,21,22,22,22,22,25,25,25,25)
-reg_symbol <- c(15,15,15,15,19,19,19,19,17,17,17,17)
+reg_symbol <- c(15,15,15,15,19,19,19,19,19,17,17,17)
 reg_symbol_Global <- c(18, reg_symbol)
 reg_color_Global <- c("red", reg_color)
 }
