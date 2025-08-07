@@ -25,7 +25,7 @@ tmp_full <- Code$Z %>%
   left_join(base$region %>% 
               select(Name, Region),
             by = c("RegionName" = "Name")) %>% 
-  mutate(DE = rowSums(E_flow[,1:11]))
+  mutate(DE = rowSums(E_flow[,1:12]))
 
 tmp_miss <- tmp_full %>% 
   filter(DE > 1000 & AREA == 0) %>% 
@@ -83,5 +83,23 @@ disagg <- sparseMatrix(
 # Transform into EXIOBASE 
 E_flow_EXIO <- disagg %*% E_flow %>% as.matrix()
 
+diff <- colSums(E_flow)[14] - 5593
+
+Code$Z %>% 
+  filter(RegionName == "China",SectorCode == 1) %>% 
+  pull(SectorIndex)
+
+E_flow[481,14] <- E_flow[481,14] - diff
+
+tmp %>% 
+  filter(col_reg == 17,
+         c == 1) %>% 
+  pull(row_index)
+
+E_flow_EXIO[3233,14] <- E_flow_EXIO[3233,14] - diff
+
+
+colSums(E_flow_EXIO)[14]
+colSums(E_flow)[14]
 
 remove(tmp, disagg, E1,E2,E3, tmp_fill, tmp_full, tmp_miss, tmp_NEW, expert_correct, HANPP_AREA_DE)

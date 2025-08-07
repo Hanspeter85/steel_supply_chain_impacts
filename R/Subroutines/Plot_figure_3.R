@@ -69,7 +69,7 @@ plot_1 <- ggplot() +
         strip.placement = "outside",
         strip.text = element_text(size = 8, face = "bold")) +
   geom_vline(xintercept = seq(0.5, 14, by = 1), color="gray", size=.5, alpha=.5) +
-  scale_y_continuous("Biome share\n",
+  scale_y_continuous("Biome-group share\n",
                      expand = c(0,0),
                      breaks = c(0.2, 0.4, 0.6, 0.8,1),
                      labels = scales::percent_format(accuracy = 1))
@@ -212,7 +212,8 @@ plot_3 <- ggplot(dat) +
         axis.title.x = element_blank(),
         legend.text = element_text(size = legend_text_size),
         axis.text = element_text(size = axis_text_size, color = "black"),
-        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 10, hjust=1),
+#        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 10, hjust=1),
+        axis.text.x = element_blank(),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_line(linetype = "dashed"),
         panel.border = element_rect(color = "lightgrey", fill = NA, linewidth = 0.5),
@@ -235,11 +236,11 @@ plot_3 <- ggplot(dat) +
 plot_3
 
 # Scale the plots and add "empty" rows to customize margins of plots
-plot_grid(plotlist = list(plot_1, NULL, plot_2,NULL,plot_3),
+plot_grid(plotlist = list(plot_2, NULL, plot_1,NULL,plot_3),
           axis = "l",
           nrow = 5,
           labels = c("A)",NA, "B)",NA, "C)"), 
-          rel_heights = c(1,0.02, 1, 0.02 ,1.2))
+          rel_heights = c(1,0.02, 1, 0.02 ,1))
 
 # plot_4 <- plot_4 + scale_x_discrete(labels = reg_name_plot) + theme(axis.text = element_text(colour = "black"))
 

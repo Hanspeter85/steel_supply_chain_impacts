@@ -26,15 +26,15 @@ Result_EXIO[["biome"]] <- data.frame("index" = 1:(n$reg*n$reg*n$biome),
 x <- rowSums(EXIO$L %*% EXIO$Y)
 
 intens <- data.frame("DE" = rowSums(E_flow_EXIO[,1:12]),
-                     "HANPP" = E_flow_EXIO[,13],
-                     "AREA" = E_flow_EXIO[,14]) %>% 
+                     "AREA" = E_flow_EXIO[,14],
+                     "HANPP" = E_flow_EXIO[,13]) %>% 
   as.matrix()/x
 
 intens[is.na(intens)] <- 0
 intens[intens == Inf] <- 0
 
 # calculate footprints (MF, eLand, eHANPP)
-i <- 1
+i <- 2
 for(i in 1:3)
 {
   MP <- EXIO$L * intens[,i]
@@ -66,13 +66,32 @@ for(i in 1:12)
   Result_EXIO$biome$value[Result_EXIO$biome$stressor == colnames(intens)[i]] <- c(FP)
 }
 
-### NEXT litegrate with PIOT result and make rocket plot like figure
 
-CHECK <- Result_EXIO$biome %>% 
-  group_by(stressor) %>% 
-  summarize(EXIO = sum(value), .groups = 'drop') %>% 
-  left_join(SI$`IO-MF-biome` %>% 
-              group_by(stressor) %>% 
-              summarize(PIOT = sum(value),.groups = 'drop'),
-            by = c("stressor"))
+# CHECK <- Result_EXIO$biome %>% 
+#   group_by(stressor) %>% 
+#   summarize(EXIO = sum(value), .groups = 'drop') %>% 
+#   left_join(SI$`IO-MF-biome` %>% 
+#               group_by(stressor) %>% 
+#               summarize(PIOT = sum(value),.groups = 'drop'),
+#             by = c("stressor"))
+# 
+# CHECK <- Result_EXIO$FP %>% 
+#   group_by(stressor, source_region) %>% 
+#   summarize(EXIO = sum(value), .groups = 'drop') %>% 
+#   mutate(stressor = case_when(stressor == "RMC" ~ "IO-MF",
+#                               stressor == "eLand" ~ "eLand-steel",
+#                               stressor == "eHANPP" ~ "eHANPP-steel")) %>% 
+#   left_join(SI$IOMF_eLand_eHANPP_GAS %>% 
+#               group_by(stressor, source_region) %>% 
+#               summarize(PIOT = sum(value),.groups = 'drop'),
+#             by = c("stressor","source_region")) %>% 
+#   mutate(diff = PIOT - EXIO,
+#          diff_rel = diff/PIOT)
+# 
+# test <- SI$IOMF_eLand_eHANPP_GAS %>% 
+#   filter(stressor == "eLand-steel") %>% 
+#   group_by(source_region) %>% 
+#   summarize(value = sum(value))
+#   
+
 

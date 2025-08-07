@@ -94,7 +94,7 @@ plot_1 <- ggplot() +
                      breaks = seq(0,1500,200),
                      position = "right") +
   scale_x_discrete(labels = Biome_label$plot,
-                   name = "Biome of Iron Ore Mining",
+                   name = "Biome-group of Iron Ore Mining",
                    expand = c(0,0)) +
   theme(legend.title.position = "top",
         legend.title = element_blank(),

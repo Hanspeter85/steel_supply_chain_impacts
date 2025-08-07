@@ -43,6 +43,10 @@
     }
   }
   
+  # check <- Result %>% 
+  #   group_by(source_region, stressor) %>% 
+  #   summarize(value = sum(value))
+  
   FP <- Result
   
   ## Write steel use (GAS) into results
@@ -118,7 +122,7 @@
   Results_sector_biomes <- Result
   # write.xlsx(x = Result, file = "./output/Sector_footprints_by_biome.xlsx")
   
-  remove(labels, MP, n, Y, i, r, x, intens, FP, Result, index, y_sel, E_flow, E_flow_new, E_index)
+  remove(labels, MP, n, Y, i, r, x, intens, FP, Result, index, y_sel, E_flow_new, E_index)
 
   # Set ranking of regions for visualization and for aggregation
   region_agg <- c("China","Europe","United States","Australia","Asia and Pacific (nec)", 
@@ -154,6 +158,15 @@
   
   # Full detail data sets for paper SI
   SI <- list()
+  
+  # Regions where there is iron ore extraction
+  remo_reg <- Results %>% 
+    filter(stressor == "RMC") %>% 
+    group_by(source_region) %>% 
+    summarize( value = sum(value)) %>% 
+    filter(value > 1000) %>% 
+    pull(source_region)
+  
   SI[["IOMF_eLand_eHANPP_GAS"]] <- Results %>% 
     left_join(agg_key_enduse, by = c("final_demand")) %>% 
     rename("end_use_group" = "end_use",
@@ -164,7 +177,7 @@
                                 stressor == "eLand" ~ "eLand-steel",
                                 stressor == "eHANPP" ~ "eHANPP-steel",
                                 stressor == "Steel_GAS" ~ "Steel-GAS")) %>% 
-    filter(value >= 1)
+    filter(source_region %in% remo_reg)
   
   SI[["IO-MF-biome"]] <- Results_sector_biomes %>% 
     left_join(agg_key_enduse, by = c("final_demand")) %>% 
@@ -172,9 +185,9 @@
            "end_use" = "final_demand") %>% 
     select(source_region, destination_region, source_region_group, destination_region_group,
            end_use, end_use_group, stressor, stressor_group, unit, value) %>% 
-    filter(value >= 1)
+    filter(source_region %in% remo_reg)
   
   
   
-  remove(Results_sector_biomes)
+  remove(Results_sector_biomes, remo_reg)
   

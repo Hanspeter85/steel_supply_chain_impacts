@@ -15,6 +15,7 @@ library(cowplot)
 library(data.table)
 library(ggpattern)
 library(Matrix)
+library(sn)
 
 # Set parameters to select raw data files (version and/or year) for the construction of PIOTs
 job <<- list("date" = "20201218",
@@ -97,6 +98,9 @@ remove(Build_Extension_AREA_HANPP_AWARE, Build_Extension_Biodiversity_Carbon_Wat
   
   write.xlsx(SI, str_c(path$repo,"/output/Full_detail_2014_footprint_accounts_in_from_to_format.xlsx"))
 }
+
+# Sensitivity test of land and HANPP footprints
+source("./R/Subroutines/Sensitivity_test.R")
 
 
 # Create figures
